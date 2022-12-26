@@ -12,14 +12,22 @@ csv (and html and json in the future.)
 At the moment it downloads from:
 - [ballsaal.at](https://www.ballsaal.at/termine_tickets/?no_cache=1)
 
-## Run it yourself
+## Build it yourself
+
+You need python3 with pip and venv, and node with npm.
 
 ```bash
+npm install
+npx tailwindcss -i ./src/input.css -o ./dist/output.css
 python3 -m venv venv
 source venv/bin/activate
 pyhton -m pip install -r requirements.txt
 python main.py
 ```
+
+**Note: ** While working on the frontend it might be quite handy to add the
+`--watch` flag to the tailwind command so that it will automatically rebuild the 
+css.
 
 ## How we deploy
 

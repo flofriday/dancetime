@@ -29,4 +29,7 @@ def download_ballsaal() -> List[DanceEvent]:
             )
         )
 
+    # FIXME: We could clean up the titles here. Some start and end with a
+    # double quote and some are in all-caps for no reason.
+
     return events

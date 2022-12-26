@@ -1,4 +1,13 @@
+# Build artifacts
 __pycache__
 venv/
+node_modules/
+
+
 a.txt
+
+# Auto generated files
 events.csv
+events.json
+index.css
+index.html
