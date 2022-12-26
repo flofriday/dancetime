@@ -18,7 +18,7 @@ You need python3 with pip and venv, and node with npm.
 
 ```bash
 npm install
-npx tailwindcss -i ./src/input.css -o ./dist/output.css
+npx tailwindcss -i template.css -o index.css
 python3 -m venv venv
 source venv/bin/activate
 pyhton -m pip install -r requirements.txt
