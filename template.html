@@ -26,7 +26,12 @@
         </div>
     </div>
 
+    <div class="text-center">
+        <span>Geupdated am: {{timestamp.strftime('%d.%m.%Y um %H:%M')}}</span>
+    </div>
+
     <div class="flex items-center justify-center mb-8">
+
         <div class="border-solid border-4 border-black rounded-3xl">
             <table>
                 <tr>
@@ -34,31 +39,14 @@
                     <th class="p-4">Event</th>
                     <th class="p-4">Ort</th>
                 </tr>
+
+                {% for event in events %}
                 <tr>
-                    <td class="p-4">07.01.2023 20:00</td>
-                    <td class="p-4">Die Wiener Nacht des Tanzes 2023 - Wiener Konzerthaus</td>
-                    <td class="p-4">Ballsaal</td>
+                    <td class="p-4">{{event.starts_at.strftime('%d.%m.%Y - %H:%M')}}</td>
+                    <td class="p-4">{{event.name}}</td>
+                    <td class="p-4">{{event.location}}</td>
                 </tr>
-                <tr>
-                    <td class="p-4">08.01.2023 17:30</td>
-                    <td class="p-4">Casual Sunday</td>
-                    <td class="p-4">Ballsaal</td>
-                </tr>
-                <tr>
-                    <td class="p-4">08.01.2023 19:00</td>
-                    <td class="p-4">Single Night</td>
-                    <td class="p-4">Ballsaal</td>
-                </tr>
-                <tr>
-                    <td class="p-4">14.01.2023 19:00</td>
-                    <td class="p-4">Wien Tanzt</td>
-                    <td class="p-4">Ballsaal</td>
-                </tr>
-                <tr>
-                    <td class="p-4">15.01.2023 19:00</td>
-                    <td class="p-4">Casual Sunday</td>
-                    <td class="p-4">Ballsaal</td>
-                </tr>
+                {% endfor %}
             </table>
 
         </div>

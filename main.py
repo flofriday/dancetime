@@ -2,6 +2,8 @@ from datetime import datetime
 from typing import List
 import csv
 import concurrent.futures
+from jinja2 import Template, select_autoescape
+
 
 from event import DanceEvent
 from ballsaal import download_ballsaal
@@ -36,6 +38,26 @@ def write_csv(events: List[DanceEvent]):
             )
 
 
+def write_html(events: List[DanceEvent]):
+
+    with open("template.html") as template_html:
+        template = Template(
+            template_html.read(),
+            autoescape=select_autoescape(
+                enabled_extensions=("html", "xml"),
+                default_for_string=True,
+            ),
+        )
+
+    with open("index.html", "w") as index:
+        index.write(
+            template.render(
+                events=events,
+                timestamp=datetime.now(),
+            )
+        )
+
+
 def main():
     events = download_events()
 
@@ -44,6 +66,7 @@ def main():
     # print(events)
 
     write_csv(events)
+    write_html(events)
 
 
 if __name__ == "__main__":
