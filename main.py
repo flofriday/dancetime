@@ -1,7 +1,9 @@
 from datetime import datetime
 from typing import List
+import os
 import csv
 import concurrent.futures
+import argparse
 from jinja2 import Template, select_autoescape
 
 
@@ -22,8 +24,9 @@ def download_events() -> List[DanceEvent]:
     return events
 
 
-def write_csv(events: List[DanceEvent]):
-    with open("events.csv", "w") as csvfile:
+def write_csv(events: List[DanceEvent], folder: str):
+    csv_path = os.path.join(folder, "events.csv")
+    with open(csv_path, "w") as csvfile:
         writer = csv.writer(csvfile, delimiter=",")
         writer.writerow(["Date", "Name", "Description", "Location", "Website"])
         for event in events:
@@ -38,7 +41,7 @@ def write_csv(events: List[DanceEvent]):
             )
 
 
-def write_html(events: List[DanceEvent]):
+def write_html(events: List[DanceEvent], folder: str):
 
     with open("template.html") as template_html:
         template = Template(
@@ -49,7 +52,8 @@ def write_html(events: List[DanceEvent]):
             ),
         )
 
-    with open("index.html", "w") as index:
+    index_path = os.path.join(folder, "index.html")
+    with open(index_path, "w") as index:
         index.write(
             template.render(
                 events=events,
@@ -59,14 +63,26 @@ def write_html(events: List[DanceEvent]):
 
 
 def main():
+    parser = argparse.ArgumentParser(
+        prog="DanceTime",
+        description="Aggregate dance envents and compile them into multiple formats.",
+    )
+    parser.add_argument(
+        "--output",
+        required=False,
+        default=".",
+        help="folder into which the outputs should be written.",
+    )
+    args = parser.parse_args()
+
     events = download_events()
 
     events = list(filter(lambda e: e.starts_at > datetime.today(), events))
     events = sorted(events, key=lambda e: e.starts_at)
     # print(events)
 
-    write_csv(events)
-    write_html(events)
+    write_csv(events, args.output)
+    write_html(events, args.output)
 
 
 if __name__ == "__main__":
