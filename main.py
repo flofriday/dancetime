@@ -1,7 +1,9 @@
-from datetime import datetime
-from typing import List
+from datetime import datetime, timedelta
+from dataclasses import dataclass
+from typing import List, Tuple, Dict
 import os
 import csv
+import json
 import concurrent.futures
 import argparse
 from jinja2 import Template, select_autoescape
@@ -13,20 +15,31 @@ from ballsaal import download_ballsaal
 from schwebach import download_schwebach
 
 
-def download_events() -> List[DanceEvent]:
+@dataclass
+class MetaData:
+    crawled_at: datetime
+    duration: timedelta
+
+
+def download_events() -> Tuple[List[DanceEvent], Dict]:
     downloaders = [download_ballsaal, download_schwebach]
 
+    # FIXME: We should catch any exceptions here so that if a single source
+    # isn't available not the whole script crashes.
     events = []
+    crawled_at = datetime.now()
     with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
         results = [executor.submit(func) for func in downloaders]
 
         for result in concurrent.futures.as_completed(results):
             events += result.result()
 
-    return events
+    metadata = MetaData(crawled_at=crawled_at,
+                        duration=datetime.now() - crawled_at)
+    return events, metadata
 
 
-def write_csv(events: List[DanceEvent], folder: str):
+def write_csv(events: List[DanceEvent], metadata: MetaData, folder: str):
     csv_path = os.path.join(folder, "events.csv")
     with open(csv_path, "w") as csvfile:
         writer = csv.writer(csvfile, delimiter=",")
@@ -43,7 +56,28 @@ def write_csv(events: List[DanceEvent], folder: str):
             )
 
 
-def write_html(events: List[DanceEvent], folder: str):
+def write_json(events: List[DanceEvent], metadata: MetaData, folder: str):
+
+    # A helper function to serialize datetime
+    def defaultconverter(o):
+        if isinstance(o, datetime):
+            return o.isoformat()
+        if isinstance(o, timedelta):
+            return o.microseconds / 1000
+        return o.__dict__
+
+    data = {
+        "timestamp": metadata.crawled_at,
+        "duration_ms": metadata.duration,
+        "events": events,
+    }
+
+    json_path = os.path.join(folder, "events.json")
+    with open(json_path, "w") as json_file:
+        json.dump(data, json_file, indent=2, default=defaultconverter)
+
+
+def write_html(events: List[DanceEvent], metadata: MetaData, folder: str):
 
     with open("template.html") as template_html:
         template = Template(
@@ -59,7 +93,7 @@ def write_html(events: List[DanceEvent], folder: str):
         index.write(
             template.render(
                 events=events,
-                timestamp=datetime.now(),
+                metadata=metadata,
             )
         )
 
@@ -104,7 +138,7 @@ def main():
     )
     args = parser.parse_args()
 
-    events = download_events()
+    events, metadata = download_events()
 
     events = list(filter(lambda e: e.starts_at > datetime.today(), events))
     events = sorted(events, key=lambda e: e.starts_at)
@@ -113,6 +147,7 @@ def main():
     write_csv(events, args.output)
     write_html(events, args.output)
     write_ics(events, args.output)
+    write_json(events, metadata, args.output)
 
 
 if __name__ == "__main__":
