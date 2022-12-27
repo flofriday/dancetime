@@ -1,0 +1,10 @@
+# A Timer to start the systemd service every hour
+[Unit]
+Description=Run Dancetime Service hourly
+
+[Timer]
+OnCalendar=*-*-* *:00:00
+Unit=dancetime.service
+
+[Install]
+WantedBy=timers.target

@@ -36,8 +36,11 @@ css.
 
 ## How we deploy
 
-I have a cron job setup that runs the script daily and the generated files are 
-statically hosted with nginx.
+I have a systemd timer setup that runs the script daily and the generated files 
+are statically hosted with nginx.
+
+You can see the systemd configuration in `dancetime.service` and 
+`dancetime.timer`.
 
 ## Contributing
 
