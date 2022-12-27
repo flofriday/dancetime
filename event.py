@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from datetime import datetime
+from typing import Optional
 
 
 @dataclass
@@ -9,3 +10,4 @@ class DanceEvent:
     description: str
     location: str
     website: str
+    ends_at: Optional[datetime] = None
