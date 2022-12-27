@@ -15,8 +15,6 @@
 </head>
 
 <body class="text-base">
-
-    <!-- Header -->
     <div class="text-center font-bold pt-16 pb-16">
         <h1 class="text-xl">
             DanceTime
@@ -27,7 +25,7 @@
     </div>
 
     <div class="text-center">
-        <span>Geupdated am: {{timestamp.strftime('%d.%m.%Y um %H:%M')}}</span>
+        <span>Geupdated am: {{metadata.crawled_at.strftime('%d.%m.%Y um %H:%M')}}</span>
     </div>
 
     <div class="flex items-center justify-center mb-8">
@@ -43,7 +41,7 @@
                 {% for event in events %}
                 <tr>
                     <td class="p-4">{{event.starts_at.strftime('%d.%m.%Y - %H:%M')}}</td>
-                    <td class="p-4">{{event.name}}</td>
+                    <td class="p-4"><a href="{{event.website}}">{{event.name}}</a></td>
                     <td class="p-4">{{event.location}}</td>
                 </tr>
                 {% endfor %}
