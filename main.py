@@ -9,10 +9,11 @@ from jinja2 import Template, select_autoescape
 
 from event import DanceEvent
 from ballsaal import download_ballsaal
+from schwebach import download_schwebach
 
 
 def download_events() -> List[DanceEvent]:
-    downloaders = [download_ballsaal]
+    downloaders = [download_ballsaal, download_schwebach]
 
     events = []
     with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:

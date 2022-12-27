@@ -4,7 +4,8 @@ import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
 
-
+# For ballsaal.at we need to download and parse html. This is more tedious than
+# a JSON API but at least the format is very consistent.
 def download_ballsaal() -> List[DanceEvent]:
     response = requests.get("https://www.ballsaal.at/termine_tickets/?no_cache=1")
 

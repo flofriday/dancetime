@@ -15,6 +15,7 @@ csv (and html and json in the future.)
 
 At the moment it downloads from:
 - [ballsaal.at](https://www.ballsaal.at/termine_tickets/?no_cache=1)
+- [schwebach.at](https://schwebach.at/events/)
 
 ## Build it yourself
 
