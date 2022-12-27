@@ -26,7 +26,7 @@ npm install
 npx tailwindcss -i template.css -o index.css
 python3 -m venv venv
 source venv/bin/activate
-pyhton -m pip install -r requirements.txt
+python -m pip install -r requirements.txt
 python main.py
 ```
 
