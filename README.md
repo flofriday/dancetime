@@ -1,6 +1,10 @@
 # dancetime 
 
+![screenshot](screenshot.png)
+
 A website generator to aggregate dance events in Vienna.
+
+[Live Demo](https://dancetime.flofriday.dev/)
 
 ## Features 
 
@@ -31,9 +35,8 @@ css.
 
 ## How we deploy
 
-At the moment I haven't deployed it yet but I plan on simply running a cron job
-every day that downloads the events and renders them into a static html file
-which I will host on my server with nginx.
+I have a cron job setup that runs the script daily and the generated files are 
+statically hosted with nginx.
 
 ## Contributing
 
