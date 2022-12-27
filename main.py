@@ -98,7 +98,7 @@ def write_html(events: List[DanceEvent], metadata: MetaData, folder: str):
         )
 
 
-def write_ics(events: List[DanceEvent], folder: str):
+def write_ics(events: List[DanceEvent], metadata: MetaData, folder: str):
     # Create a new calendar
     cal = icalendar.Calendar()
     cal.add('prodid', '-//DanceTime//flofriday//')
@@ -144,9 +144,9 @@ def main():
     events = sorted(events, key=lambda e: e.starts_at)
     # print(events)
 
-    write_csv(events, args.output)
-    write_html(events, args.output)
-    write_ics(events, args.output)
+    write_csv(events,  metadata,  args.output)
+    write_html(events,  metadata,  args.output)
+    write_ics(events, metadata, args.output)
     write_json(events, metadata, args.output)
 
 
