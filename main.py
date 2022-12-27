@@ -5,6 +5,7 @@ import csv
 import concurrent.futures
 import argparse
 from jinja2 import Template, select_autoescape
+import icalendar
 
 
 from event import DanceEvent
@@ -63,6 +64,33 @@ def write_html(events: List[DanceEvent], folder: str):
         )
 
 
+def write_ics(events: List[DanceEvent], folder: str):
+    # Create a new calendar
+    cal = icalendar.Calendar()
+    cal.add('prodid', '-//DanceTime//flofriday//')
+    cal.add('version', '1.0')
+
+    for event in events:
+        # Create a new event
+        ics_event = icalendar.Event()
+
+        # Set the event properties
+        ics_event.add('summary', event.name)
+        ics_event.add('dtstart', icalendar.vDDDTypes(event.starts_at))
+        if (event.ends_at != None):
+            ics_event.add('dtend', icalendar.vDDDTypes(event.ends_at))
+        ics_event.add('location', event.location)
+        ics_event.add('url', event.website)
+
+        # Add the event to the calendar
+        cal.add_component(ics_event)
+
+    # Serialize the calendar to an ICS file
+    ics_path = os.path.join(folder, "events.ics")
+    with open(ics_path, "wb") as icsfile:
+        icsfile.write(cal.to_ical())
+
+
 def main():
     parser = argparse.ArgumentParser(
         prog="DanceTime",
@@ -84,6 +112,7 @@ def main():
 
     write_csv(events, args.output)
     write_html(events, args.output)
+    write_ics(events, args.output)
 
 
 if __name__ == "__main__":
