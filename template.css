@@ -15,7 +15,7 @@
     margin-right: auto;
   }
 
-  button {
+  .button {
     @apply border-solid border-2 border-black rounded-lg 
     bg-[#65C8CD] 
     px-1.5 py-0.5 font-bold;
