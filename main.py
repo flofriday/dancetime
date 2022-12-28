@@ -6,6 +6,7 @@ import csv
 import json
 import concurrent.futures
 import argparse
+import shutil
 from jinja2 import Template, select_autoescape
 import icalendar
 
@@ -34,8 +35,7 @@ def download_events() -> Tuple[List[DanceEvent], Dict]:
         for result in concurrent.futures.as_completed(results):
             events += result.result()
 
-    metadata = MetaData(crawled_at=crawled_at,
-                        duration=datetime.now() - crawled_at)
+    metadata = MetaData(crawled_at=crawled_at, duration=datetime.now() - crawled_at)
     return events, metadata
 
 
@@ -101,20 +101,20 @@ def write_html(events: List[DanceEvent], metadata: MetaData, folder: str):
 def write_ics(events: List[DanceEvent], metadata: MetaData, folder: str):
     # Create a new calendar
     cal = icalendar.Calendar()
-    cal.add('prodid', '-//DanceTime//flofriday//')
-    cal.add('version', '1.0')
+    cal.add("prodid", "-//DanceTime//flofriday//")
+    cal.add("version", "1.0")
 
     for event in events:
         # Create a new event
         ics_event = icalendar.Event()
 
         # Set the event properties
-        ics_event.add('summary', event.name)
-        ics_event.add('dtstart', icalendar.vDDDTypes(event.starts_at))
-        if (event.ends_at != None):
-            ics_event.add('dtend', icalendar.vDDDTypes(event.ends_at))
-        ics_event.add('location', event.location)
-        ics_event.add('url', event.website)
+        ics_event.add("summary", event.name)
+        ics_event.add("dtstart", icalendar.vDDDTypes(event.starts_at))
+        if event.ends_at != None:
+            ics_event.add("dtend", icalendar.vDDDTypes(event.ends_at))
+        ics_event.add("location", event.location)
+        ics_event.add("url", event.website)
 
         # Add the event to the calendar
         cal.add_component(ics_event)
@@ -142,12 +142,18 @@ def main():
 
     events = list(filter(lambda e: e.starts_at > datetime.today(), events))
     events = sorted(events, key=lambda e: e.starts_at)
-    # print(events)
 
-    write_csv(events,  metadata,  args.output)
-    write_html(events,  metadata,  args.output)
-    write_ics(events, metadata, args.output)
+    # Create a couple of data files
     write_json(events, metadata, args.output)
+    write_csv(events, metadata, args.output)
+    write_ics(events, metadata, args.output)
+
+    # Create the Webpage which needs the css file
+    try:
+        shutil.copy("index.css", os.path.join(args.output, "index.css"))
+    except shutil.SameFileError:
+        pass
+    write_html(events, metadata, args.output)
 
 
 if __name__ == "__main__":
