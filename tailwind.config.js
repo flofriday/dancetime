@@ -9,11 +9,6 @@ module.exports = {
       display: ["IBM Plex Sans"],
       body: ["IBM Plex Sans"],
     },
-    fontSize: {
-      sm: "1rem",
-      base: "1.25rem",
-      xl: "5rem",
-    },
     extend: {
       fontFamily: {
         sans: ["IBM Plex Sans", ...defaultTheme.fontFamily.sans],

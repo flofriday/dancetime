@@ -7,3 +7,21 @@
     font-family: "IBM Plex Sans", system-ui, sans-serif;
   }
 }
+
+@layer components {
+  .content {
+    @apply px-8 max-w-3xl;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  button {
+    @apply border-solid border-2 border-black rounded-lg 
+    bg-[#65C8CD] 
+    px-1.5 py-0.5 font-bold;
+  }
+
+  a {
+    @apply text-blue-700 hover:underline;
+  }
+}
