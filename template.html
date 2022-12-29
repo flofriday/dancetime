@@ -31,7 +31,8 @@
     <div class="relative w-full mb-8 mt-2">
         <div class="absolute top-8 h-full w-full bg-[#F8BED4] border-t-4 border-x-4 border-solid  border-black "></div>
         <div class="relative top-0 bg-whitee w-full px-4 sm:px-8">
-            <div class="w-full bg-white border-solid border-4 border-black rounded-3xl max-w-3xl ml-auto mr-auto">
+            <div
+                class="w-full bg-white border-solid border-4 border-black rounded-3xl max-w-3xl ml-auto mr-auto overflow-x-scroll">
                 <table class="w-full">
                     <tr>
                         <th class="p-2">Datum</th>
@@ -40,10 +41,10 @@
                     </tr>
 
                     {% for event in events %}
-                    <tr class="hover:bg-gray-200 border-t-2 border-black border-dotted">
-                        <td class="p-2 pl-4">{{event.starts_at.strftime('%d.%m.%Y - %H:%M')}}</td>
+                    <tr class="border-t-2 border-black border-dotted">
+                        <td class="p-2 pl-3">{{event.starts_at.strftime('%d.%m.%Y - %H:%M')}}</td>
                         <td class="p-2 text-center"><a href="{{event.website}}">{{event.name}}</a></td>
-                        <td class="p-2 pr-4 text-right">{{event.location}}</td>
+                        <td class="p-2 pr-3 sm:pr-4 text-right">{{event.location}}</td>
                     </tr>
                     {% endfor %}
                 </table>
