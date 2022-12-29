@@ -33,7 +33,11 @@ def download_schwebach_events() -> List[DanceEvent]:
         name = clean_name(item["nc_name"])
 
         # The description is in html so let's convert it to text.
-        description = BeautifulSoup(item["nc_description"], features="html.parser").text
+        description = item["nc_shortDescription"]
+        if description == "":
+            description = BeautifulSoup(
+                item["nc_description"], features="html.parser"
+            ).text
 
         events.append(
             DanceEvent(
@@ -49,8 +53,9 @@ def download_schwebach_events() -> List[DanceEvent]:
     return events
 
 
+# I found another API to download the dancecafe dates. This one is a lot more
+# awkward to use as it has to be a post request to download the events.
 def download_schwebach_dancecafe() -> List[DanceEvent]:
-
     url = "https://schwebach.at/wp-content/plugins/sieglsolutions_masterPlugin/getData/getTanzcafeExternEvents.php"
 
     # NOTE: I have no f*cking idea what this payload is, but let's hope it is
