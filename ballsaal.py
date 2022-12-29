@@ -5,6 +5,27 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 
 
+def clean_name(name: str) -> str:
+    # Some names are in all-caps which is just ugly
+    if name.isupper():
+        name = " ".join([part.capitalize() for part in name.split(" ")])
+
+    # Some names start and end with a double quote for now reason
+    if name.startswith('"') and name.endswith('"'):
+        name = name[1:-1]
+
+    # And some events should just always be renamed
+    rename_table = {
+        "Vienna Salsa Splash": "Salsa Splash",
+        "Ballsaal LIVE": "Ballsaal Live",
+    }
+
+    if name in rename_table:
+        name = rename_table[name]
+
+    return name
+
+
 # For ballsaal.at we need to download and parse html. This is more tedious than
 # a JSON API but at least the format is very consistent.
 def download_ballsaal() -> List[DanceEvent]:
@@ -16,6 +37,7 @@ def download_ballsaal() -> List[DanceEvent]:
     events = []
     for event in event_items:
         name = event.find(class_="name").text
+        name = clean_name(name)
         description = event.find(class_="short-description").text
         date_string = event.find(class_="date").text
         url = event.find(class_="button")["href"]
@@ -30,8 +52,5 @@ def download_ballsaal() -> List[DanceEvent]:
                 website=url,
             )
         )
-
-    # FIXME: We could clean up the titles here. Some start and end with a
-    # double quote and some are in all-caps for no reason.
 
     return events
