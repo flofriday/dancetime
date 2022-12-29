@@ -1,7 +1,8 @@
 from typing import List
 from event import DanceEvent
-import requests
 from datetime import datetime
+import requests
+from bs4 import BeautifulSoup
 
 
 # After a bit of snooping around I found an API call the website makes to get
@@ -18,12 +19,15 @@ def download_schwebach() -> List[DanceEvent]:
         if item["location_bez"] != "Wien":
             continue
 
+        # The description is in html so let's convert it to text.
+        description = BeautifulSoup(item["nc_description"], features="html.parser").text
+
         # FIXME: the description contains html instead of pure text.
         events.append(
             DanceEvent(
                 starts_at=datetime.fromtimestamp(int(item["nc_begin"])),
                 name=item["nc_name"],
-                description=item["nc_description"],
+                description=description,
                 location="Schwebach",
                 website="https://schwebach.at/events/" + item["webroute"],
             )
