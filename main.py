@@ -19,6 +19,7 @@ from rueff import download_rueff
 
 @dataclass
 class MetaData:
+    count: int
     crawled_at: datetime
     duration: timedelta
 
@@ -36,7 +37,11 @@ def download_events() -> Tuple[List[DanceEvent], Dict]:
         for result in concurrent.futures.as_completed(results):
             events += result.result()
 
-    metadata = MetaData(crawled_at=crawled_at, duration=datetime.now() - crawled_at)
+    metadata = MetaData(
+        count=len(events),
+        crawled_at=crawled_at,
+        duration=datetime.now() - crawled_at,
+    )
     return events, metadata
 
 
@@ -70,6 +75,7 @@ def write_json(events: List[DanceEvent], metadata: MetaData, folder: str):
     data = {
         "timestamp": metadata.crawled_at,
         "duration_ms": metadata.duration,
+        "event_count": metadata.count,
         "events": events,
     }
 
