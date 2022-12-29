@@ -87,7 +87,7 @@ def download_schwebach_dancecafe() -> List[DanceEvent]:
                 name=name,
                 description="Der gemütliche Mittelpunkt zum Tanzen und Entspannen!",
                 location="Schwebach",
-                website="",
+                website="https://schwebach.at/tanzcafe/",
             )
         )
 
