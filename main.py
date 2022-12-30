@@ -13,8 +13,9 @@ import icalendar
 
 from event import DanceEvent
 from ballsaal import download_ballsaal
-from schwebach import download_schwebach
 from rueff import download_rueff
+from schwebach import download_schwebach
+from stanek import download_stanek
 
 
 @dataclass
@@ -25,7 +26,12 @@ class MetaData:
 
 
 def download_events() -> Tuple[List[DanceEvent], Dict]:
-    downloaders = [download_ballsaal, download_schwebach, download_rueff]
+    downloaders = [
+        download_ballsaal,
+        download_rueff,
+        download_schwebach,
+        download_stanek,
+    ]
 
     # FIXME: We should catch any exceptions here so that if a single source
     # isn't available not the whole script crashes.

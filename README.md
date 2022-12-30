@@ -17,6 +17,7 @@ At the moment it downloads from:
 - [ballsaal.at](https://www.ballsaal.at/termine_tickets/?no_cache=1)
 - [schwebach.at](https://schwebach.at/events/)
 - [tanzschulerueff.at](https://tanzschulerueff.at/)
+- [tanzschulestanek.at](https://tanzschulestanek.at/)
 
 ## Build it yourself
 
