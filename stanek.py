@@ -1,6 +1,6 @@
 from typing import List
 from event import DanceEvent
-from datetime import datetime
+from datetime import datetime, timedelta, date
 import requests
 
 
@@ -9,9 +9,11 @@ import requests
 # the server via json. So let's just pretend we are a weird calendar and we
 # need some events.
 def download_stanek() -> List[DanceEvent]:
-    # FIXME calculate dates
+    # Calculate the dates and make the request
+    start_date = date.today()
+    end_date = start_date + timedelta(weeks=9)
     response = requests.get(
-        "https://tanzschulestanek.at/wp-content/plugins/ts_kurse/api/ts_kalender.php?start=2022-12-30&end=2023-02-28&kategorie=&cache=0.9797512370776541"
+        f"https://tanzschulestanek.at/wp-content/plugins/ts_kurse/api/ts_kalender.php?start={start_date.isoformat()}&end={end_date.isoformat()}"
     )
     data = response.json()
 
@@ -24,6 +26,7 @@ def download_stanek() -> List[DanceEvent]:
         "https://tanzschulestanek.at/veranstaltungen/",
     ]
 
+    # Convert the json data to events
     events = []
     for item in data:
         # Ignore courses that are not open to the public
