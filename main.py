@@ -153,7 +153,8 @@ def main():
 
     events, metadata = download_events()
 
-    events = list(filter(lambda e: e.starts_at > datetime.today(), events))
+    today = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+    events = list(filter(lambda e: e.starts_at > today, events))
     events = sorted(events, key=lambda e: e.starts_at)
 
     # Create a couple of data files
