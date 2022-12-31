@@ -129,7 +129,7 @@ def write_ics(events: List[DanceEvent], metadata: MetaData, folder: str):
         # Set the event properties
         ics_event.add('uid', event_uuid)
         ics_event.add("summary", event.name)
-        ics_event.add('dtstamp', datetime.datetime.now())
+        ics_event.add('dtstamp', datetime.now())
         ics_event.add("dtstart", icalendar.vDDDTypes(event.starts_at))
         if event.ends_at != None:
             ics_event.add("dtend", icalendar.vDDDTypes(event.ends_at))
