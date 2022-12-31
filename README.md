@@ -2,7 +2,7 @@
 
 ![screenshot](screenshot.png)
 
-A website generator to aggregate dance events in Vienna.
+A website to find dance events in Vienna.
 
 [Live Demo](https://dancetime.flofriday.dev/)
 
@@ -11,7 +11,7 @@ A website generator to aggregate dance events in Vienna.
 A couple of my friends and I love to go (ballroom) dancing in Vienna. However, 
 looking up a couple websites every week can be quite tedious. So this tool
 crawls all of them normalizes them into a uniform format and outputs them as 
-html, csv and json.
+html, csv, json and as iCalendar to embed in your calendar.
 
 At the moment it downloads from:
 - [Ballsaal](https://www.ballsaal.at/termine_tickets/?no_cache=1)
