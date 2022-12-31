@@ -33,13 +33,23 @@ def download_stanek() -> List[DanceEvent]:
         if not item["url"] in allowed_urls:
             continue
 
+        starts_at = datetime.fromisoformat(item["start"])
+
         url = item["url"]
         if url == "":
             url = "https://tanzschulestanek.at/veranstaltungen/"
 
+        ends_at = None
+
+        # Dance Nights seam to always end at 22h so for this kind of event we
+        # set the end date manually.
+        if "dance night" in item["title"].lower():
+            ends_at = starts_at.replace(hour=22, minute=00)
+
         events.append(
             DanceEvent(
-                starts_at=datetime.fromisoformat(item["start"]),
+                starts_at=starts_at,
+                ends_at=ends_at,
                 name=item["title"],
                 description="",
                 dancing_school="Stanek",
