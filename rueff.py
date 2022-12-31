@@ -31,7 +31,7 @@ def download_rueff_breakfast() -> List[DanceEvent]:
                 ends_at=starts_at.replace(hour=13, minute=00),
                 name="Tanzfrühstück",
                 description="Tanzen und frühstücken am Sonntag in der Tanzschule Rueff!",
-                location="Rueff",
+                dancing_school="Rueff",
                 website="https://www.tanzschulerueff.at/fruehstueck.htm",
             )
         )
@@ -69,7 +69,7 @@ def create_perfections() -> List[DanceEvent]:
                 ends_at=date.replace(hour=22, minute=15),
                 name="Perfektion",
                 description="Verbringen Sie einen angenehmen, netten Abend in unseren vielseitigen und beliebten Perfektionen und teilen Sie Ihr Tanzhobby mit Gleichgesinnten.",
-                location="Rueff",
+                dancing_school="Rueff",
                 website="https://www.tanzschulerueff.at/perfektionen.htm",
             )
         )
@@ -83,7 +83,7 @@ def create_perfections() -> List[DanceEvent]:
                 ends_at=date.replace(hour=21, minute=45),
                 name="Perfektion",
                 description="Verbringen Sie einen angenehmen, netten Abend in unseren vielseitigen und beliebten Perfektionen und teilen Sie Ihr Tanzhobby mit Gleichgesinnten.",
-                location="Rueff",
+                dancing_school="Rueff",
                 website="https://www.tanzschulerueff.at/perfektionen.htm",
             )
         )
@@ -97,7 +97,7 @@ def create_perfections() -> List[DanceEvent]:
                 ends_at=date.replace(hour=17, minute=45),
                 name="Afterwork Perfektion",
                 description="Verbringen Sie einen angenehmen, netten Abend in unseren vielseitigen und beliebten Perfektionen und teilen Sie Ihr Tanzhobby mit Gleichgesinnten.",
-                location="Rueff",
+                dancing_school="Rueff",
                 website="https://www.tanzschulerueff.at/perfektionen.htm",
             )
         )
