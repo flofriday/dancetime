@@ -128,7 +128,6 @@ def write_ics(events: List[DanceEvent], metadata: MetaData, folder: str):
         if event.ends_at != None:
             ics_event.add("dtend", icalendar.vDDDTypes(event.ends_at))
         ics_event.add("location", event.location)
-        ics_event.add("url", event.website)
         ics_event.add("description",
                       event.website + '\n' + event.description)
         ics_event.add("x-alt-desc",
