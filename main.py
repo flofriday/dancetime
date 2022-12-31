@@ -17,6 +17,7 @@ from ballsaal import download_ballsaal
 from rueff import download_rueff
 from schwebach import download_schwebach
 from stanek import download_stanek
+from svabek import download_svabek
 
 
 @dataclass
@@ -32,6 +33,7 @@ def download_events() -> Tuple[List[DanceEvent], Dict]:
         download_rueff,
         download_schwebach,
         download_stanek,
+        download_svabek,
     ]
 
     # FIXME: We should catch any exceptions here so that if a single source
