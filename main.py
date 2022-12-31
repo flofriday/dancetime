@@ -27,7 +27,7 @@ class MetaData:
     duration: timedelta
 
 
-def download_events() -> Tuple[List[DanceEvent], Dict]:
+def download_events() -> Tuple[List[DanceEvent], MetaData]:
     downloaders = [
         download_ballsaal,
         download_rueff,
@@ -172,6 +172,7 @@ def main():
 
     today = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
     events = list(filter(lambda e: e.starts_at > today, events))
+    metadata.count = len(events)  # update count after sorting
     events = sorted(events, key=lambda e: e.starts_at)
 
     # Create a couple of data files
