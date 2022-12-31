@@ -42,7 +42,7 @@ def download_stanek() -> List[DanceEvent]:
                 starts_at=datetime.fromisoformat(item["start"]),
                 name=item["title"],
                 description="",
-                location="Stanek",
+                dancing_school="Stanek",
                 website=url,
             )
         )

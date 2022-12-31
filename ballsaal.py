@@ -48,7 +48,7 @@ def download_ballsaal() -> List[DanceEvent]:
                 starts_at=date,
                 name=name,
                 description=description,
-                location="Ballsaal",
+                dancing_school="Ballsaal",
                 website=url,
             )
         )

@@ -8,6 +8,6 @@ class DanceEvent:
     starts_at: datetime
     name: str
     description: str
-    location: str
+    dancing_school: str
     website: str
     ends_at: Optional[datetime] = None

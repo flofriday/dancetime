@@ -45,7 +45,7 @@ def download_schwebach_events() -> List[DanceEvent]:
                 ends_at=datetime.fromtimestamp(int(item["nc_end"])),
                 name=name,
                 description=description,
-                location="Schwebach",
+                dancing_school="Schwebach",
                 website="https://schwebach.at/events/" + item["webroute"],
             )
         )
@@ -86,7 +86,7 @@ def download_schwebach_dancecafe() -> List[DanceEvent]:
                 ends_at=datetime.fromtimestamp(int(item["nc_end_timeU"])),
                 name=name,
                 description="Der gemütliche Mittelpunkt zum Tanzen und Entspannen!",
-                location="Schwebach",
+                dancing_school="Schwebach",
                 website="https://schwebach.at/tanzcafe/",
             )
         )

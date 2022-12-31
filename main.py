@@ -56,14 +56,14 @@ def write_csv(events: List[DanceEvent], metadata: MetaData, folder: str):
     csv_path = os.path.join(folder, "events.csv")
     with open(csv_path, "w") as csvfile:
         writer = csv.writer(csvfile, delimiter=",")
-        writer.writerow(["Date", "Name", "Description", "Location", "Website"])
+        writer.writerow(["Date", "Name", "Description", "Dancing School", "Website"])
         for event in events:
             writer.writerow(
                 [
                     event.starts_at,
                     event.name,
                     event.description,
-                    event.location,
+                    event.dancing_school,
                     event.website,
                 ]
             )
@@ -115,9 +115,9 @@ def write_html(events: List[DanceEvent], metadata: MetaData, folder: str):
 def write_ics(events: List[DanceEvent], metadata: MetaData, folder: str):
     # Create a new calendar
     cal = icalendar.Calendar()
-    cal.add('prodid', '-//DanceTime//flofriday//')
-    cal.add('version', '2.0')
-    cal.add('x-wr-calname', 'DanceTime')
+    cal.add("prodid", "-//DanceTime//flofriday//")
+    cal.add("version", "2.0")
+    cal.add("x-wr-calname", "DanceTime")
 
     for event in events:
         # Create a new event
@@ -127,17 +127,21 @@ def write_ics(events: List[DanceEvent], metadata: MetaData, folder: str):
         event_uuid = uuid.uuid4()
 
         # Set the event properties
-        ics_event.add('uid', event_uuid)
+        ics_event.add("uid", event_uuid)
         ics_event.add("summary", event.name)
-        ics_event.add('dtstamp', datetime.now())
+        ics_event.add("dtstamp", datetime.now())
         ics_event.add("dtstart", icalendar.vDDDTypes(event.starts_at))
         if event.ends_at != None:
             ics_event.add("dtend", icalendar.vDDDTypes(event.ends_at))
-        ics_event.add("location", event.location)
-        ics_event.add("description",
-                      event.website + '\n' + event.description)
-        ics_event.add("x-alt-desc",
-                      """<a href="http: // """ + event.website + """">Website</a><br><br>""" + event.description)
+        ics_event.add("location", event.dancing_school)
+        ics_event.add("description", event.website + "\n" + event.description)
+        ics_event.add(
+            "x-alt-desc",
+            """<a href="http: // """
+            + event.website
+            + """">Website</a><br><br>"""
+            + event.description,
+        )
 
         # Add the event to the calendar
         cal.add_component(ics_event)
