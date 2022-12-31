@@ -34,7 +34,7 @@ def create_perfections() -> List[DanceEvent]:
                 ends_at=date.replace(hour=23, minute=30),
                 name="Perfektion",
                 description="Abendbeitrag € 5, - / Pers. Offener Tanzabend für alle! Kursteilnahme nicht notwendig.",
-                location="Svabek",
+                dancing_school="Svabek",
                 website="https://tanzschulewien.at/Perfektionen/",
             )
         )
@@ -43,6 +43,3 @@ def create_perfections() -> List[DanceEvent]:
 
 def download_svabek() -> List[DanceEvent]:
     return create_perfections()
-
-
-print(download_svabek())
