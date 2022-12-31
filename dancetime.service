@@ -1,0 +1,12 @@
+# The systemd service for dancetime
+[Unit]
+Description=Dancetime Service
+
+[Service]
+Type=simple
+User=dancetime
+WorkingDirectory=/home/dancetime/dancetime
+ExecStart=/bin/bash -c "source venv/bin/activate && python main.py --output dist"
+
+[Install]
+WantedBy=multi-user.target

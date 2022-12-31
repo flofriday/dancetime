@@ -11,11 +11,13 @@ A website generator to aggregate dance events in Vienna.
 A couple of my friends and I love to go (ballroom) dancing in Vienna. However, 
 looking up a couple websites every week can be quite tedious. So this tool
 crawls all of them normalizes them into a uniform format and outputs them as 
-csv (and html and json in the future.)
+html, csv and json.
 
 At the moment it downloads from:
 - [ballsaal.at](https://www.ballsaal.at/termine_tickets/?no_cache=1)
 - [schwebach.at](https://schwebach.at/events/)
+- [tanzschulerueff.at](https://tanzschulerueff.at/)
+- [tanzschulestanek.at](https://tanzschulestanek.at/)
 
 ## Build it yourself
 
@@ -30,16 +32,19 @@ python -m pip install -r requirements.txt
 python main.py
 ```
 
-**Note: ** While working on the frontend it might be quite handy to add the
+**Note:** While working on the frontend it might be quite handy to add the
 `--watch` flag to the tailwind command so that it will automatically rebuild the 
 css.
 
 ## How we deploy
 
-I have a cron job setup that runs the script daily and the generated files are 
-statically hosted with nginx.
+I have a systemd timer setup that runs the script daily and the generated files 
+are statically hosted with nginx.
+
+You can see the systemd configuration in `dancetime.service` and 
+`dancetime.timer`.
 
 ## Contributing
 
 Contributions are very welcome. At the moment I only ask you to use black to 
-format your code.
+format your code. You are awesome 😊🎉
