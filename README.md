@@ -14,10 +14,11 @@ crawls all of them normalizes them into a uniform format and outputs them as
 html, csv and json.
 
 At the moment it downloads from:
-- [ballsaal.at](https://www.ballsaal.at/termine_tickets/?no_cache=1)
-- [schwebach.at](https://schwebach.at/events/)
-- [tanzschulerueff.at](https://tanzschulerueff.at/)
-- [tanzschulestanek.at](https://tanzschulestanek.at/)
+- [Ballsaal](https://www.ballsaal.at/termine_tickets/?no_cache=1)
+- [Schwebach](https://schwebach.at/events/)
+- [Rueff](https://tanzschulerueff.at/)
+- [Stanek](https://tanzschulestanek.at/)
+- [Svabek](https://tanzschulewien.at/)
 
 ## Build it yourself
 
