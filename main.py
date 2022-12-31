@@ -139,10 +139,10 @@ def write_ics(events: List[DanceEvent], metadata: MetaData, folder: str):
         ics_event.add("location", event.dancing_school)
         ics_event.add("description", event.website + "\n" + event.description)
         ics_event.add(
-            "x-alt-desc",
-            """<a href=""""
+            'x-alt-desc',
+            '<a href="'
             + event.website
-            + """">Website</a><br><br>"""
+            + '">Website</a><br><br>'
             + event.description,
         )
 
