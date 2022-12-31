@@ -91,6 +91,10 @@ def download_schwebach_dancecafe() -> List[DanceEvent]:
             )
         )
 
+    # FIXME: Every week there are two events on thursday, one from 15-18h and
+    # one from 18-22:30. Since they have the same name, it would really makes
+    # sense to merge them into one.
+
     return events
 
 
