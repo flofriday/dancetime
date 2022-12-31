@@ -3,6 +3,8 @@ from typing import List
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
+import dateparser
+import concurrent.futures
 
 
 def clean_name(name: str) -> str:
@@ -24,6 +26,20 @@ def clean_name(name: str) -> str:
         name = rename_table[name]
 
     return name
+
+
+# For the ends_at we need to do a second request to the ticketing website
+# because only there it says when the event will end. That is a bit of
+# work so we are doing it here in a separate function.
+def add_ends_at(event: DanceEvent):
+    response = requests.get(event.website)
+    html = response.text
+
+    soup = BeautifulSoup(html, "html.parser")
+    date_text = soup.find("span", class_="end-date").text
+    event.ends_at = dateparser.parse(date_text, languages=["de", "en"])
+
+    return event
 
 
 # For ballsaal.at we need to download and parse html. This is more tedious than
@@ -52,5 +68,11 @@ def download_ballsaal() -> List[DanceEvent]:
                 website=url,
             )
         )
+
+    # Add the ends_at to each event event if
+    # FIXME: If this second request throws an exception we should still
+    # add the event.
+    with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
+        events = list(executor.map(lambda e: add_ends_at(e), events))
 
     return events
