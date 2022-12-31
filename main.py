@@ -58,7 +58,8 @@ def write_csv(events: List[DanceEvent], metadata: MetaData, folder: str):
     csv_path = os.path.join(folder, "events.csv")
     with open(csv_path, "w") as csvfile:
         writer = csv.writer(csvfile, delimiter=",")
-        writer.writerow(["Date", "Name", "Description", "Dancing School", "Website"])
+        writer.writerow(["Date", "Name", "Description",
+                        "Dancing School", "Website"])
         for event in events:
             writer.writerow(
                 [
@@ -138,10 +139,10 @@ def write_ics(events: List[DanceEvent], metadata: MetaData, folder: str):
         ics_event.add("location", event.dancing_school)
         ics_event.add("description", event.website + "\n" + event.description)
         ics_event.add(
-            "x-alt-desc",
-            """<a href="http: // """
+            'x-alt-desc',
+            '<a href="'
             + event.website
-            + """">Website</a><br><br>"""
+            + '">Website</a><br><br>'
             + event.description,
         )
 
