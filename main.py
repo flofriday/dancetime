@@ -129,6 +129,8 @@ def write_ics(events: List[DanceEvent], metadata: MetaData, folder: str):
             ics_event.add("dtend", icalendar.vDDDTypes(event.ends_at))
         ics_event.add("location", event.location)
         ics_event.add("url", event.website)
+        ics_event.add("description",
+                      """<a href="http: // """ + event.website + """">Website</a><br><br>""" + event.description)
 
         # Add the event to the calendar
         cal.add_component(ics_event)
