@@ -3,6 +3,7 @@ from typing import List
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
+from dateutil.relativedelta import relativedelta
 import dateparser
 import concurrent.futures
 
@@ -38,6 +39,10 @@ def add_ends_at(event: DanceEvent):
     soup = BeautifulSoup(html, "html.parser")
     date_text = soup.find("span", class_="end-date").text
     event.ends_at = dateparser.parse(date_text, languages=["de", "en"])
+
+    # We don't parse the year so, the year it might assume, can be off by one.
+    if event.starts_at > event.ends_at:
+        event.ends_at += relativedelta(years=1)
 
     return event
 
