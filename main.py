@@ -102,7 +102,7 @@ def write_ics(events: List[DanceEvent], metadata: MetaData, folder: str):
     # Create a new calendar
     cal = icalendar.Calendar()
     cal.add('prodid', '-//DanceTime//flofriday//')
-    cal.add('version', '1.0')
+    cal.add('version', '2.0')
 
     for event in events:
         # Create a new event
