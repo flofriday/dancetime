@@ -9,6 +9,7 @@ import argparse
 import shutil
 from jinja2 import Template, select_autoescape
 import icalendar
+import uuid
 
 
 from event import DanceEvent
@@ -122,8 +123,13 @@ def write_ics(events: List[DanceEvent], metadata: MetaData, folder: str):
         # Create a new event
         ics_event = icalendar.Event()
 
+        # Generate a UUID
+        event_uuid = uuid.uuid4()
+
         # Set the event properties
+        ics_event.add('uid', event_uuid)
         ics_event.add("summary", event.name)
+        ics_event.add('dtstamp', datetime.datetime.now())
         ics_event.add("dtstart", icalendar.vDDDTypes(event.starts_at))
         if event.ends_at != None:
             ics_event.add("dtend", icalendar.vDDDTypes(event.ends_at))
