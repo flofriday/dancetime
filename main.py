@@ -117,6 +117,17 @@ def write_json(events: List[DanceEvent], metadata: MetaData, folder: str):
 
 
 def write_html(events: List[DanceEvent], metadata: MetaData, folder: str):
+    def format_date(d: datetime) -> str:
+        if d.date() == datetime.now().date():
+            return "Heute"
+        if d.date() == (datetime.now() + timedelta(days=1)).date():
+            return "Morgen"
+
+        if (d - datetime.now()).days < 7:
+            days = ["Mo.", "Di.", "Mi.", "Do.", "Fr.", "Sa.", "So."]
+            return days[d.weekday()]
+
+        return d.strftime("%d.%m.%Y")
 
     with open("template.html") as template_html:
         template = Template(
@@ -126,6 +137,7 @@ def write_html(events: List[DanceEvent], metadata: MetaData, folder: str):
                 default_for_string=True,
             ),
         )
+        template.globals["format_date"] = format_date
 
     index_path = os.path.join(folder, "index.html")
     with open(index_path, "w") as index:
