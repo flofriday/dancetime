@@ -79,7 +79,7 @@ def write_json(events: List[DanceEvent], metadata: MetaData, folder: str):
         if isinstance(o, datetime):
             return o.isoformat()
         if isinstance(o, timedelta):
-            return o.microseconds / 1000
+            return (o.seconds * 1000) + int(o.microseconds / 1000)
         return o.__dict__
 
     data = {
