@@ -2,9 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --text-color: #1e1e1e;
+  --text-secondary-color: #505050;
+  --background-color: #fffaf0;
+  --background-accent-color: #ffd787;
+  --accent1-color: #abe5bc;
+  --footer-color: #cfade8;
+  --download-color: #ffa776;
+}
+
 @layer base {
   html {
     font-family: "IBM Plex Sans", system-ui, sans-serif;
+    color: var(--text-color);
+    background-color: var(--background-color);
   }
 }
 
@@ -15,13 +27,15 @@
     margin-right: auto;
   }
 
-  .button {
-    @apply border-solid border-2 border-black rounded-lg 
-    bg-[#65C8CD] 
-    px-1.5 py-0.5 font-bold;
+  .link {
+    @apply text-blue-700 hover:underline;
   }
 
-  a {
-    @apply text-blue-700 hover:underline;
+  .card-border {
+    @apply border-2 border-[var(--text-color)];
+  }
+
+  .card-shadow {
+    box-shadow: 2px 3px 0px var(--text-color);
   }
 }

@@ -17,7 +17,7 @@
 </head>
 
 <body class="max-w-full min-h-max">
-    <div class="text-center font-bold pt-16 pb-12">
+    <div class="text-center font-bold pt-16 pb-16">
         <h1 class="text-6xl pb-4 px-4">
             DanceTime
         </h1>
@@ -26,37 +26,35 @@
         </div>
     </div>
 
-    <div class="content text-center">
-        <span class="mt-auto">Geupdated am: {{metadata.crawled_at.strftime('%d.%m.%Y um %H:%M')}}</span>
-    </div>
-
-    <div class="relative w-full mb-16 mt-2">
-        <div class="absolute top-16 h-full w-full bg-[#F8BED4] border-t-4 border-x-4 border-solid  border-black "></div>
-        <div class="relative top-0 bg-whitee w-full px-4 sm:px-8">
+    <div class="relative w-full mb-5 mt-2">
+        <div
+            class="absolute top-5 h-full w-full bg-[var(--background-accent-color)] border-t-2 border-x-2 border-solid rounded-t-3xl border-black ">
+        </div>
+        <div class="relative w-full px-5">
             <div
-                class="w-full bg-white border-solid border-4 border-black rounded-3xl max-w-3xl ml-auto mr-auto overflow-x-scroll">
-                <table class="w-full">
-                    <tr>
-                        <th class="p-2">Datum</th>
-                        <th class="p-2">Event</th>
-                        <th class="p-2">Tanzschule</th>
-                    </tr>
-
-                    {% for event in events %}
-                    <tr class="border-t-2 border-black border-dotted">
-                        <td class="p-2 pl-3">{{format_date(event.starts_at)}} {{event.starts_at.strftime('%H:%M')}} -
-                            {{event.ends_at.strftime('%H:%M')}}
-                        </td>
-                        <td class="p-2 text-center"><a href="{{event.website}}">{{event.name}}</a></td>
-                        <td class="p-2 pr-3 sm:pr-4 text-right">{{event.dancing_school}}</td>
-                    </tr>
-                    {% endfor %}
-                </table>
+                class="rounded-full mr-auto ml-auto px-3 w-fit mb-5 h-10 bg-[var(--accent1-color)] text-center flex items-center card-border card-shadow">
+                Geupdated am: {{metadata.crawled_at.strftime('%d.%m.%Y um %H:%M')}}
             </div>
+
+            {% for event in events %}
+            <a href="{{event.website}}"
+                class="block w-full bg-[var(--background-color)] rounded-2xl card-border card-shadow pt-2 pb-2.5 px-4 mb-5">
+                <div class="text-lg mb-0.5">{{event.name}}</div>
+                <div class="flex justify-between text-sm text-[var(--text-secondary-color)]">
+                    <div>
+                        <span class="pr-1.5">{{format_date(event.starts_at)}}</span>
+                        <span>{{event.starts_at.strftime('%H:%M')}} -
+                            {{event.ends_at.strftime('%H:%M')}}</span>
+                    </div>
+                    <span>{{event.dancing_school}}</span>
+                </div>
+            </a>
+            {% endfor %}
+
         </div>
     </div>
 
-    <div class="bg-[#65C8CD] border-solid border-t-4 border-x-4 border-black py-4">
+    <div class="bg-[var(--download-color)] card-border border-b-0 py-4">
         <div class="content">
             <h2 class="text-2xl font-bold">Herunterladen</h2>
             <p>Diese Webseite sammelt jede Stunde Events automatisch. Diese
@@ -64,16 +62,17 @@
                 folgenden Formaten heruntergeladen werden:
             </p>
             <ul class="list-disc p-3 pl-8">
-                <li><a href="/events.csv">CSV (Excel)</a></li>
-                <li><a href="/events.ics">iCal (Kalender)</a></li>
-                <li><a href="/events.json">JSON (für Entwickler)</a></li>
+                <li><a class="link" href="/events.csv">CSV (Excel)</a></li>
+                <li><a class="link" href="/events.ics">iCal (Kalender)</a></li>
+                <li><a class="link" href="/events.json">JSON (für Entwickler)</a></li>
             </ul>
         </div>
     </div>
-    <div class="bg-[#62C0A5] border-solid border-4 border-black  py-4">
+    <div class="bg-[var(--footer-color)] card-border py-4">
         <div class="content flex justify-between">
             <span>Erstellt mit ❤️ vom Mittwochskurs</span>
-            <span class="text-right">Open Source auf <a href="https://github.com/flofriday/dancetime">GitHub</a></span>
+            <span class="text-right">Open Source auf <a class="link"
+                    href="https://github.com/flofriday/dancetime">GitHub</a></span>
         </div>
     </div>
 
