@@ -28,7 +28,7 @@
 
     <div class="relative w-full mb-5 mt-2">
         <div
-            class="absolute top-5 h-full w-full bg-[var(--background-accent-color)] border-t-2 border-x-2 border-solid rounded-t-3xl border-black ">
+            class="absolute top-5 h-full w-full bg-[var(--background-accent-color)] border-t-2 border-x-2  rounded-t-3xl border-[var(--text-color)]">
         </div>
         <div class="relative w-full px-5">
             <div
@@ -38,7 +38,7 @@
 
             {% for event in events %}
             <a href="{{event.website}}"
-                class="block w-full bg-[var(--background-color)] rounded-2xl card-border card-shadow pt-2 pb-2.5 px-4 mb-5">
+                class="block w-full bg-[var(--background-color)] rounded-2xl card-border card-shadow pt-2 pb-2.5 px-4 mb-5 max-w-xl mx-auto">
                 <div class="text-lg mb-0.5">{{event.name}}</div>
                 <div class="flex justify-between text-sm text-[var(--text-secondary-color)]">
                     <div>
@@ -53,8 +53,11 @@
 
         </div>
     </div>
+    <div class="h-5 w-full bg-[var(--background-accent-color)] border-x-2 border-[var(--text-color)]">
+        <!-- This is just an extra padding -->
+    </div>
 
-    <div class="bg-[var(--download-color)] card-border border-b-0 py-4">
+    <div class="bg-[var(--download-color)] card-border border-b-0 py-4 border-[var(--text-color)]">
         <div class="content">
             <h2 class="text-2xl font-bold">Herunterladen</h2>
             <p>Diese Webseite sammelt jede Stunde Events automatisch. Diese
@@ -68,7 +71,7 @@
             </ul>
         </div>
     </div>
-    <div class="bg-[var(--footer-color)] card-border py-4">
+    <div class="bg-[var(--footer-color)] card-border py-4 border-[var(--text-color)]">
         <div class="content flex justify-between">
             <span>Erstellt mit ❤️ vom Mittwochskurs</span>
             <span class="text-right">Open Source auf <a class="link"
