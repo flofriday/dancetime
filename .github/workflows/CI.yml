@@ -21,7 +21,7 @@ jobs:
           cd dancetime
           git pull
           npm install
-          npx tailwindcss -i template.css -o index.css
+          npx tailwindcss --minify -i template.css -o index.css
           source venv/bin/activate
           python -m pip install -r requirements.txt
           python main.py --output dist
