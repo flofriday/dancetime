@@ -21,6 +21,7 @@ def download_schwebach_events() -> List[DanceEvent]:
     response = requests.get(
         "https://schwebach.at/wp-content/plugins/sieglsolutions_masterPlugin/getData/getEvents.php"
     )
+    response.raise_for_status()
     data = response.json()
 
     events = []
@@ -65,6 +66,7 @@ def download_schwebach_dancecafe() -> List[DanceEvent]:
         "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
     }
     response = requests.post(url, headers=headers, data=payload)
+    response.raise_for_status()
     data = response.json()
 
     events = []

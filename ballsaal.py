@@ -34,6 +34,7 @@ def clean_name(name: str) -> str:
 # work so we are doing it here in a separate function.
 def add_ends_at(event: DanceEvent):
     response = requests.get(event.website)
+    response.raise_for_status()
     html = response.text
 
     soup = BeautifulSoup(html, "html.parser")

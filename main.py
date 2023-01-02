@@ -10,6 +10,8 @@ import shutil
 from jinja2 import Template, select_autoescape
 import icalendar
 import uuid
+from requests.exceptions import HTTPError, ConnectionError, Timeout
+import sys
 
 
 from event import DanceEvent
@@ -25,6 +27,7 @@ class MetaData:
     count: int
     crawled_at: datetime
     duration: timedelta
+    error_messages: List[str]
 
 
 def download_events() -> Tuple[List[DanceEvent], MetaData]:
@@ -36,20 +39,39 @@ def download_events() -> Tuple[List[DanceEvent], MetaData]:
         download_svabek,
     ]
 
-    # FIXME: We should catch any exceptions here so that if a single source
-    # isn't available not the whole script crashes.
     events = []
+    error_messages = []
     crawled_at = datetime.now()
     with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
         results = [executor.submit(func) for func in downloaders]
 
         for result in concurrent.futures.as_completed(results):
-            events += result.result()
+            try:
+                events += result.result()
+            except HTTPError as e:
+                status = e.response.status_code
+                url = e.request.url
+                message = f"Got {status} from {url}"
+                print("🔥 " + message)
+                error_messages.append(message)
+
+            except ConnectionError as e:
+                message = f"Failed to connect to {e.request.url}"
+                print("🔥 " + message)
+                error_messages.append(message)
+
+            except Exception as e:
+                exc_type, _, exc_tb = sys.exc_info()
+                fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+                message = f"{exc_type.__name__} in {fname}:{exc_tb.tb_lineno}: {str(e)}"
+                print("🔥 " + message)
+                error_messages.append(message)
 
     metadata = MetaData(
         count=len(events),
         crawled_at=crawled_at,
         duration=datetime.now() - crawled_at,
+        error_messages=error_messages,
     )
     return events, metadata
 
@@ -85,6 +107,7 @@ def write_json(events: List[DanceEvent], metadata: MetaData, folder: str):
         "timestamp": metadata.crawled_at,
         "duration_ms": metadata.duration,
         "event_count": metadata.count,
+        "error_messages": metadata.error_messages,
         "events": events,
     }
 
@@ -184,6 +207,11 @@ def main():
     except shutil.SameFileError:
         pass
     write_html(events, metadata, args.output)
+
+    # Write final statistics
+    print(
+        f"Downloaded {metadata.count} events in {metadata.duration.total_seconds():.2f}s."
+    )
 
 
 if __name__ == "__main__":

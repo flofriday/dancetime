@@ -15,6 +15,7 @@ def download_stanek() -> List[DanceEvent]:
     response = requests.get(
         f"https://tanzschulestanek.at/wp-content/plugins/ts_kurse/api/ts_kalender.php?start={start_date.isoformat()}&end={end_date.isoformat()}"
     )
+    response.raise_for_status()
     data = response.json()
 
     # FIXME: We need to investigate if to where events really link.

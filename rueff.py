@@ -9,6 +9,7 @@ from datetime import datetime, timedelta
 # Download the next dance breakfast from the website
 def download_rueff_breakfast() -> List[DanceEvent]:
     response = requests.get("https://www.tanzschulerueff.at/fruehstueck.htm")
+    response.raise_for_status()
 
     soup = BeautifulSoup(response.text, "html.parser")
     select = soup.find("select", {"name": "Auswahl"})
