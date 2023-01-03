@@ -26,19 +26,19 @@
         </div>
     </div>
 
-    <div class="relative w-full mb-5 mt-2">
+    <div class="relative w-full">
         <div
-            class="absolute top-5 h-full w-full bg-[var(--background-accent-color)] border-t-2 border-x-2  rounded-t-3xl border-[var(--text-color)]">
+            class="absolute top-4 h-full w-full bg-[var(--background-accent-color)] border-x-2 border-t-2 rounded-t-3xl border-[var(--text-color)]">
         </div>
-        <div class="relative w-full px-5">
+        <div class="relative w-full px-5 mb-2">
             <div
-                class="rounded-full mr-auto ml-auto px-3 w-fit mb-5 h-10 bg-[var(--accent1-color)] text-center flex items-center card-border card-shadow">
+                class="rounded-full mr-auto ml-auto px-2 w-fit mb-5 h-8 bg-[var(--accent1-color)] text-center text-sm flex items-center card-border card-shadow">
                 Aktualisiert am: {{metadata.crawled_at.strftime('%d.%m.%Y um %H:%M')}}
             </div>
 
             {% for event in events %}
             <a href="{{event.website}}"
-                class="block w-full bg-[var(--background-color)] rounded-2xl card-border card-shadow pt-2 pb-2.5 px-4 mb-5 max-w-xl mx-auto">
+                class="block w-full bg-[var(--background-color)] rounded-2xl card-border card-shadow pt-2 pb-2.5 px-4 mb-5 last:mb-4 max-w-xl mx-auto">
                 <div class="text-lg mb-0.5">{{event.name}}</div>
                 <div class="flex justify-between text-sm text-[var(--text-secondary-color)]">
                     <div>
