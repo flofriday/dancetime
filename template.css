@@ -22,7 +22,7 @@
 
 @layer components {
   .content {
-    @apply px-8 max-w-3xl;
+    @apply px-8 max-w-2xl;
     margin-left: auto;
     margin-right: auto;
   }
