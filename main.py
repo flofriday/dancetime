@@ -213,11 +213,13 @@ def main():
     write_csv(events, metadata, args.output)
     write_ics(events, metadata, args.output)
 
-    # Create the Webpage which needs the css file
-    try:
-        shutil.copy("index.css", os.path.join(args.output, "index.css"))
-    except shutil.SameFileError:
-        pass
+    # Create the Webpage which needs some static files
+    static_files = ["index.css", "logo32.png", "logo180.png", "logo.svg"]
+    for file in static_files:
+        try:
+            shutil.copy(file, os.path.join(args.output, file))
+        except shutil.SameFileError:
+            pass
     write_html(events, metadata, args.output)
 
     # Write final statistics
