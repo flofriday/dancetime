@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from dataclasses import dataclass
-from typing import List, Tuple, Dict
+from typing import List, Tuple
 import os
 import csv
 import json
@@ -10,12 +10,13 @@ import shutil
 from jinja2 import Template, select_autoescape
 import icalendar
 import uuid
-from requests.exceptions import HTTPError, ConnectionError, Timeout
+from requests.exceptions import HTTPError, ConnectionError
 import sys
 
 
 from event import DanceEvent
 from ballsaal import download_ballsaal
+from chris import download_chris
 from rueff import download_rueff
 from schwebach import download_schwebach
 from stanek import download_stanek
@@ -33,6 +34,7 @@ class MetaData:
 def download_events() -> Tuple[List[DanceEvent], MetaData]:
     downloaders = [
         download_ballsaal,
+        download_chris,
         download_rueff,
         download_schwebach,
         download_stanek,
@@ -42,7 +44,7 @@ def download_events() -> Tuple[List[DanceEvent], MetaData]:
     events = []
     error_messages = []
     crawled_at = datetime.now()
-    with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
+    with concurrent.futures.ThreadPoolExecutor() as executor:
         results = [executor.submit(func) for func in downloaders]
 
         for result in concurrent.futures.as_completed(results):
@@ -66,6 +68,7 @@ def download_events() -> Tuple[List[DanceEvent], MetaData]:
                 message = f"{exc_type.__name__} in {fname}:{exc_tb.tb_lineno}: {str(e)}"
                 print("🔥 " + message)
                 error_messages.append(message)
+                raise e
 
     metadata = MetaData(
         count=len(events),
@@ -204,7 +207,7 @@ def main():
     events, metadata = download_events()
 
     today = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
-    events = list(filter(lambda e: e.starts_at > today, events))
+    events = list(filter(lambda e: e.starts_at >= today, events))
     metadata.count = len(events)  # update count after sorting
     events = sorted(events, key=lambda e: e.starts_at)
 

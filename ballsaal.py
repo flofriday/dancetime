@@ -52,6 +52,7 @@ def add_ends_at(event: DanceEvent):
 # a JSON API but at least the format is very consistent.
 def download_ballsaal() -> List[DanceEvent]:
     response = requests.get("https://www.ballsaal.at/termine_tickets/?no_cache=1")
+    response.raise_for_status()
 
     soup = BeautifulSoup(response.text, features="html.parser")
     event_items = soup.find_all(class_="event")
@@ -78,7 +79,7 @@ def download_ballsaal() -> List[DanceEvent]:
     # Add the ends_at to each event event if
     # FIXME: If this second request throws an exception we should still
     # add the event.
-    with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
+    with concurrent.futures.ThreadPoolExecutor() as executor:
         events = list(executor.map(lambda e: add_ends_at(e), events))
 
     return events
