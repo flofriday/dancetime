@@ -83,11 +83,14 @@ def write_csv(events: List[DanceEvent], metadata: MetaData, folder: str):
     csv_path = os.path.join(folder, "events.csv")
     with open(csv_path, "w") as csvfile:
         writer = csv.writer(csvfile, delimiter=",")
-        writer.writerow(["Date", "Name", "Description", "Dancing School", "Website"])
+        writer.writerow(
+            ["Starts at", "Ends at", "Name", "Description", "Dancing School", "Website"]
+        )
         for event in events:
             writer.writerow(
                 [
                     event.starts_at,
+                    event.ends_at,
                     event.name,
                     event.description,
                     event.dancing_school,
