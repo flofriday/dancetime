@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
 from dataclasses import dataclass
 from typing import List, Tuple
 import os
@@ -172,10 +173,16 @@ def write_ics(events: List[DanceEvent], metadata: MetaData, folder: str):
         # Set the event properties
         ics_event.add("uid", event_uuid)
         ics_event.add("summary", event.name)
-        ics_event.add("dtstamp", datetime.now())
-        ics_event.add("dtstart", icalendar.vDDDTypes(event.starts_at))
+        ics_event.add(
+            "dtstamp", datetime.now().replace(tzinfo=ZoneInfo("Europe/Vienna"))
+        )
+        ics_event.add(
+            "dtstart", event.starts_at.replace(tzinfo=ZoneInfo("Europe/Vienna"))
+        )
         if event.ends_at != None:
-            ics_event.add("dtend", icalendar.vDDDTypes(event.ends_at))
+            ics_event.add(
+                "dtend", event.ends_at.replace(tzinfo=ZoneInfo("Europe/Vienna"))
+            )
         ics_event.add("location", event.dancing_school)
         ics_event.add("description", event.website + "\n\n" + event.description)
         ics_event.add(
