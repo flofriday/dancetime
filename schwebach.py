@@ -54,6 +54,26 @@ def download_schwebach_events() -> List[DanceEvent]:
     return events
 
 
+# Every week there are two events on thursday, one from 15-18h and
+# one from 18-22:30. Since they have the same name, it would really makes
+# sense to merge them into one.
+def merge_events(events: List[DanceEvent]) -> List[DanceEvent]:
+    if len(events) == 0:
+        return []
+
+    events = sorted(events, key=lambda e: e.starts_at)
+
+    merged_events = events[:1]
+    for event in events[1:]:
+        last_event = merged_events[-1]
+        if event.name == last_event.name and event.starts_at <= last_event.ends_at:
+            last_event.ends_at = max(event.ends_at, last_event.ends_at)
+        else:
+            merged_events.append(event)
+
+    return merged_events
+
+
 # I found another API to download the dancecafe dates. This one is a lot more
 # awkward to use as it has to be a post request to download the events.
 def download_schwebach_dancecafe() -> List[DanceEvent]:
@@ -93,10 +113,8 @@ def download_schwebach_dancecafe() -> List[DanceEvent]:
             )
         )
 
-    # FIXME: Every week there are two events on thursday, one from 15-18h and
-    # one from 18-22:30. Since they have the same name, it would really makes
-    # sense to merge them into one.
-
+    # Some events are kinda duplicated in their API so we merge them together.
+    events = merge_events(events)
     return events
 
 
