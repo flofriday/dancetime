@@ -45,7 +45,7 @@ def download_schwebach_events() -> List[DanceEvent]:
                 starts_at=datetime.fromtimestamp(int(item["nc_begin"])),
                 ends_at=datetime.fromtimestamp(int(item["nc_end"])),
                 name=name,
-                description=description,
+                description=description.strip(),
                 dancing_school="Schwebach",
                 website="https://schwebach.at/events/" + item["webroute"],
             )
