@@ -23,7 +23,8 @@ At the moment it downloads from:
 
 ## Build it yourself
 
-You need python3 with pip and venv, and node with npm.
+You need [python3](https://www.python.org/downloads/) (only tested with python 3.11)
+with [pip](https://pip.pypa.io/en/stable/) and [venv](https://docs.python.org/3/library/venv.html), and [node](https://nodejs.org/en/) with [npm](https://www.npmjs.com/package/npm).
 
 ```bash
 npm install
@@ -38,10 +39,25 @@ python main.py
 `--watch` flag to the tailwind command so that it will automatically rebuild the 
 css.
 
+## Usage
+
+```
+usage: DanceTime [-h] [--output OUTPUT]
+
+Aggregate dance envents and compile them into multiple formats.
+
+options:
+  -h, --help       show this help message and exit
+  --output OUTPUT  folder into which the outputs should be written.
+```
+
 ## How we deploy
 
-I have a systemd timer setup that runs the script daily and the generated files 
-are statically hosted with nginx.
+We directly deploy the main branch to [dancetime.flofriday.dev](https://dancetime.flofriday.dev)
+with our CI/CD [GitHub Action](https://docs.github.com/en/actions).
+
+On the linux server we have a [systemd](https://systemd.io/) timer setup that 
+runs the script hourly and the generated files are statically hosted with nginx.
 
 You can see the systemd configuration in `dancetime.service` and 
 `dancetime.timer`.
