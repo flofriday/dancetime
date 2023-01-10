@@ -57,7 +57,8 @@ We directly deploy the main branch to [dancetime.flofriday.dev](https://dancetim
 with our CI/CD [GitHub Action](https://docs.github.com/en/actions).
 
 On the linux server we have a [systemd](https://systemd.io/) timer setup that 
-runs the script hourly and the generated files are statically hosted with nginx.
+runs the script hourly and the generated files are statically hosted with 
+[nginx](https://nginx.org/en/).
 
 You can see the systemd configuration in `dancetime.service` and 
 `dancetime.timer`.
