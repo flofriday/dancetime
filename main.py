@@ -69,7 +69,6 @@ def download_events() -> Tuple[List[DanceEvent], MetaData]:
                 message = f"{exc_type.__name__} in {fname}:{exc_tb.tb_lineno}: {str(e)}"
                 print("🔥 " + message)
                 error_messages.append(message)
-                raise e
 
     metadata = MetaData(
         count=len(events),
