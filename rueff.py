@@ -3,7 +3,7 @@ from typing import List
 import requests
 from bs4 import BeautifulSoup
 import dateparser
-from datetime import datetime, timedelta
+from util import repeat_weekly, next_weekday
 
 
 # Download the next dance breakfast from the website
@@ -38,18 +38,6 @@ def download_rueff_breakfast() -> List[DanceEvent]:
         )
 
     return events
-
-
-def repeat_weekly(date: datetime, n: int) -> List[datetime]:
-    return [date + timedelta(weeks=i) for i in range(n)]
-
-
-def next_weekday(day: str) -> datetime:
-    days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-    day_index = days.index(day)
-
-    today = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
-    return today + timedelta(days=(day_index - today.weekday()) % 7)
 
 
 # So the website for the dance perfections isn't easily parsable, so the best

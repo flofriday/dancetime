@@ -34,22 +34,27 @@ class MetaData:
 
 def download_events() -> Tuple[List[DanceEvent], MetaData]:
     downloaders = [
-        download_ballsaal,
-        download_chris,
-        download_rueff,
-        download_schwebach,
-        download_stanek,
-        download_svabek,
+        ("Ballsaal", download_ballsaal),
+        ("Chris", download_chris),
+        ("Rueff", download_rueff),
+        ("Schwebach", download_schwebach),
+        ("Stanek", download_stanek),
+        ("Svabek", download_svabek),
     ]
 
     events = []
     error_messages = []
     crawled_at = datetime.now()
     with concurrent.futures.ThreadPoolExecutor() as executor:
-        results = [executor.submit(func) for func in downloaders]
+        results = [executor.submit(downloader[1]) for downloader in downloaders]
+
+        name_map = {r: downloaders[i][0] for (i, r) in enumerate(results)}
 
         for result in concurrent.futures.as_completed(results):
             try:
+                print(
+                    f"Downloaded {name_map[result]} in {(datetime.now() - crawled_at).total_seconds():.2f}s"
+                )
                 events += result.result()
             except HTTPError as e:
                 status = e.response.status_code
@@ -236,7 +241,7 @@ def main():
 
     # Write final statistics
     print(
-        f"Downloaded {metadata.count} events in {metadata.duration.total_seconds():.2f}s."
+        f"Created {metadata.count} events in {metadata.duration.total_seconds():.2f}s."
     )
 
 
