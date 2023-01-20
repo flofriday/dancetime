@@ -3,9 +3,33 @@ from event import DanceEvent
 from datetime import datetime
 import requests
 from bs4 import BeautifulSoup
+import re
 
 
 def clean_name(name: str) -> str:
+    # Quite a lot of events end in Month and Year so let's remove that.
+    months = [
+        "jänner",
+        "februar",
+        "märz",
+        "april",
+        "mai",
+        "juni",
+        "juli",
+        "august",
+        "september",
+        "oktober",
+        "november",
+        "dezember",
+    ]
+    splited = name.split(" ")
+    if (
+        len(splited) >= 3
+        and splited[-2].lower() in months
+        and re.match("[0-9]{4}", splited[-1])
+    ):
+        name = " ".join(splited[:-2])
+
     # The dancebreakfasts also include the Month, Year and Weekday.
     # This is just noisy information as we see the date anyway so let's just
     # remove it.
