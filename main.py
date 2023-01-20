@@ -18,10 +18,12 @@ import sys
 from event import DanceEvent
 from ballsaal import download_ballsaal
 from chris import download_chris
+from immervoll import download_immervoll
 from rueff import download_rueff
 from schwebach import download_schwebach
 from stanek import download_stanek
 from svabek import download_svabek
+import inspect
 
 
 @dataclass
@@ -36,6 +38,7 @@ def download_events() -> Tuple[List[DanceEvent], MetaData]:
     downloaders = [
         ("Ballsaal", download_ballsaal),
         ("Chris", download_chris),
+        ("Immervoll", download_immervoll),
         ("Rueff", download_rueff),
         ("Schwebach", download_schwebach),
         ("Stanek", download_stanek),
@@ -69,9 +72,9 @@ def download_events() -> Tuple[List[DanceEvent], MetaData]:
                 error_messages.append(message)
 
             except Exception as e:
-                exc_type, _, exc_tb = sys.exc_info()
-                fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-                message = f"{exc_type.__name__} in {fname}:{exc_tb.tb_lineno}: {str(e)}"
+                line_no, file_name = inspect.trace()[-1][2:4]
+                exc_type, _, _exc_tb = sys.exc_info()
+                message = f"{exc_type.__name__} in {file_name}:{line_no}: {str(e)}"
                 print("🔥 " + message)
                 error_messages.append(message)
 
