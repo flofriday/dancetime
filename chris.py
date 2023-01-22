@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 import concurrent.futures
 from util import repeat_weekly, next_weekday
+from holiday import holidays
 
 
 def download_chris_event(url: str) -> DanceEvent:
@@ -65,9 +66,14 @@ def download_chris_events() -> List[DanceEvent]:
 
 def create_perfektions() -> List[DanceEvent]:
     events = []
+    disallowed = holidays()
 
     # Every Friday from 20-22h
     for day in repeat_weekly(next_weekday("Fri"), 9):
+        # Except on holidays
+        if day.date() in disallowed:
+            continue
+
         events.append(
             DanceEvent(
                 starts_at=day.replace(hour=20, minute=00),
