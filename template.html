@@ -65,8 +65,22 @@
             <h2 class="text-2xl font-bold">Kalender Integration</h2>
             <div
                 class="w-full max-w-xl text-center mx-auto my-3 py-2 px-3 card-border card-shadow rounded-xl bg-[var(--background-color)]">
-                https://dancetime.flofriday.dev/events.ics
+                <span id="location">[Diese Webseite]/</span>events.ics
             </div>
+            <script type="text/javascript">
+                function removeEnd(string, substring) {
+                    if (string.endsWith(substring)) {
+                        return string.slice(0, -substring.length);
+                    }
+                    return string;
+                }
+                let f = () => {
+                    document.getElementById("location").innerText = removeEnd(window.location.toString(), "index.html");
+                }
+                document.onload = f;
+                onDOMContentLoaded = f;
+                window.onload = f;
+            </script>
             <p>
                 Über diesen Link können die Events auch als Kalender abonniert
                 werden.
@@ -104,7 +118,7 @@
     </div>
     <div class="bg-[var(--footer-color)] card-border py-4 border-[var(--text-color)]">
         <div class="content flex justify-between">
-            <span>Erstellt mit ❤️ vom Mittwochskurs</span>
+            <span>Erstellt mit ❤️ von der Community</span>
             <span class="text-right">Open Source auf <a class="link"
                     href="https://github.com/flofriday/dancetime">GitHub</a></span>
         </div>
