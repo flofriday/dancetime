@@ -9,18 +9,15 @@ from holiday import holidays
 import re
 
 
+# Parses any string that contains either time in the format
+# `15` or `15:34`.
 def parse_time(text: str) -> Tuple[int, int]:
-    if re.search("[0-9]{2}:[0-9]{2}", text):
-        return tuple(
-            map(lambda i: int(i), re.search("([0-9]{2}):([0-9]{2})", text).groups())
-        )
-
-    elif re.search("[0-9]{2}", text):
-        return (int(re.search("([0-9]{2})", text).groups()[0]), 0)
-
+    match = re.search(r"(\d{2}):?(\d{2})?", text)
+    if match:
+        hour, minute = match.groups()
+        return int(hour), int(minute or 0)
     else:
-        print("None: " + text)
-        return None
+        raise ValueError(f"Invalid time format: {text}")
 
 
 def download_chris_event(url: str) -> DanceEvent:

@@ -7,34 +7,17 @@ import re
 
 
 def clean_name(name: str) -> str:
-    # Quite a lot of events end in Month and Year so let's remove that.
-    months = [
-        "jänner",
-        "februar",
-        "märz",
-        "april",
-        "mai",
-        "juni",
-        "juli",
-        "august",
-        "september",
-        "oktober",
-        "november",
-        "dezember",
-    ]
-    splited = name.split(" ")
-    if (
-        len(splited) >= 3
-        and splited[-2].lower() in months
-        and re.match("[0-9]{4}", splited[-1])
-    ):
-        name = " ".join(splited[:-2])
-
-    # The dancebreakfasts also include the Month, Year and Weekday.
-    # This is just noisy information as we see the date anyway so let's just
-    # remove it.
-    if name.startswith("Tanzfrühstück"):
-        name = "Tanzfrühstück"
+    # Many events contain one (or many) of the following things in their name:
+    # - The year of the event
+    # - The month of the event (in german)
+    # - The weekday abbreviation (in german) of the event. eg: "(Sa)"
+    # These are just noise for our usage though because we display the date and
+    # time anyway.
+    name = re.subn(
+        "([0-9]{4}|\([a-zA-Z]{2}\)|Jänner|Februar|März|April|Mai|Juni|Juli|August|September|Oktober|November|Dezember)",
+        "",
+        name,
+    )[0].strip()
 
     return name
 
