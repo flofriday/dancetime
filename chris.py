@@ -1,11 +1,26 @@
 from event import DanceEvent
-from typing import List
+from typing import List, Tuple
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 import concurrent.futures
 from util import repeat_weekly, next_weekday
 from holiday import holidays
+import re
+
+
+def parse_time(text: str) -> Tuple[int, int]:
+    if re.search("[0-9]{2}:[0-9]{2}", text):
+        return tuple(
+            map(lambda i: int(i), re.search("([0-9]{2}):([0-9]{2})", text).groups())
+        )
+
+    elif re.search("[0-9]{2}", text):
+        return (int(re.search("([0-9]{2})", text).groups()[0]), 0)
+
+    else:
+        print("None: " + text)
+        return None
 
 
 def download_chris_event(url: str) -> DanceEvent:
@@ -18,12 +33,8 @@ def download_chris_event(url: str) -> DanceEvent:
         soup.find(class_="news-list-date").text.strip(), "%d.%m.%Y"
     )
 
-    start_hour, start_minute = (
-        soup.find(class_="event-starttime").text.strip().split(":")
-    )
-    end_hour, end_minute = (
-        soup.find(class_="event-endtime").text[2 : (2 + 5)].strip().split(":")
-    )
+    start_hour, start_minute = parse_time(soup.find(class_="event-starttime").text)
+    end_hour, end_minute = parse_time(soup.find(class_="event-endtime").text)
 
     starts_at = base_date.replace(hour=int(start_hour), minute=int(start_minute))
     ends_at = base_date.replace(hour=int(end_hour), minute=int(end_minute))

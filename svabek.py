@@ -13,8 +13,7 @@ def create_perfections() -> List[DanceEvent]:
     events = []
 
     # Every thursday evening
-    thursday = next_weekday("Thu")
-    for date in repeat_weekly(thursday, 9):
+    for date in repeat_weekly(next_weekday("Thu"), 9):
         events.append(
             DanceEvent(
                 starts_at=date.replace(hour=20, minute=00),
