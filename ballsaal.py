@@ -45,6 +45,8 @@ def add_ends_at(event: DanceEvent):
     if event.starts_at > event.ends_at:
         event.ends_at += relativedelta(years=1)
 
+    # FIXME: We could also include all prices and wether or not it is full.
+
     return event
 
 
@@ -77,8 +79,6 @@ def download_ballsaal() -> List[DanceEvent]:
         )
 
     # Add the ends_at to each event event if
-    # FIXME: If this second request throws an exception we should still
-    # add the event.
     with concurrent.futures.ThreadPoolExecutor() as executor:
         events = list(executor.map(lambda e: add_ends_at(e), events))
 
