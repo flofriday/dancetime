@@ -9,18 +9,19 @@ import concurrent.futures
 
 
 def clean_name(name: str) -> str:
-    # Some names are in all-caps which is just ugly
-    if name.isupper():
-        name = " ".join([part.capitalize() for part in name.split(" ")])
-
-    # Some names start and end with a double quote for now reason
+    # Some names start and end with a double quote for no reason
     if name.startswith('"') and name.endswith('"'):
         name = name[1:-1]
+
+    # Sometimes words inside names are in ALL-CAPS which is just ugly
+    def deupperice(text: str) -> str:
+        return text.capitalize() if text.isupper() else text
+
+    name = " ".join(map(deupperice, name.split(" ")))
 
     # And some events should just always be renamed
     rename_table = {
         "Vienna Salsa Splash": "Salsa Splash",
-        "Ballsaal LIVE": "Ballsaal Live",
     }
 
     if name in rename_table:
