@@ -141,7 +141,7 @@ def write_html(events: List[DanceEvent], metadata: MetaData, folder: str):
         if (d - datetime.now()).days < 7:
             return days[d.weekday()] + "."
 
-        return days[d.weekday()] + ", " + d.strftime("%d.%m.%Y")
+        return d.strftime("%d.%m.%Y") + " " + days[d.weekday()] + "."
 
     with open("template.html") as template_html:
         template = Template(
