@@ -137,11 +137,11 @@ def write_html(events: List[DanceEvent], metadata: MetaData, folder: str):
         if d.date() == (datetime.now() + timedelta(days=1)).date():
             return "Morgen"
 
+        days = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"]
         if (d - datetime.now()).days < 7:
-            days = ["Mo.", "Di.", "Mi.", "Do.", "Fr.", "Sa.", "So."]
-            return days[d.weekday()]
+            return days[d.weekday()] + "."
 
-        return d.strftime("%d.%m.%Y")
+        return days[d.weekday()] + ", " + d.strftime("%d.%m.%Y")
 
     with open("template.html") as template_html:
         template = Template(
@@ -211,7 +211,7 @@ def write_ics(events: List[DanceEvent], metadata: MetaData, folder: str):
 def main():
     parser = argparse.ArgumentParser(
         prog="DanceTime",
-        description="Aggregate dance envents and compile them into multiple formats.",
+        description="Aggregate dance events and compile them into multiple formats.",
     )
     parser.add_argument(
         "--output",
