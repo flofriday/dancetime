@@ -47,7 +47,7 @@
                     <div>
                         <span class="pr-1.5">{{format_date(event.starts_at)}}</span>
                         <span>{{event.starts_at.strftime('%H:%M')}} -
-                            {{event.ends_at.strftime('%H:%M')}}</span>
+                            {{event.ends_at.strftime('%H:%M') if event.ends_at else "unbekannt"}}</span>
                     </div>
                     <span>{{event.dancing_school}}</span>
                 </div>
