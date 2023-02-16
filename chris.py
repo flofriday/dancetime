@@ -1,5 +1,5 @@
 from event import DanceEvent
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
@@ -20,7 +20,7 @@ def parse_time(text: str) -> Tuple[int, int]:
         raise ValueError(f"Invalid time format: {text}")
 
 
-def download_chris_event(url: str) -> DanceEvent:
+def download_chris_event(url: str) -> Optional[DanceEvent]:
     response = requests.get(url)
     response.raise_for_status()
 
@@ -30,7 +30,11 @@ def download_chris_event(url: str) -> DanceEvent:
         soup.find(class_="news-list-date").text.strip(), "%d.%m.%Y"
     )
 
-    start_hour, start_minute = parse_time(soup.find(class_="event-starttime").text)
+    try:
+        start_hour, start_minute = parse_time(soup.find(class_="event-starttime").text)
+    except Exception:
+        # We cannot handle events that don't specify at least a starting time
+        return None
     end_hour, end_minute = parse_time(soup.find(class_="event-endtime").text)
 
     starts_at = base_date.replace(hour=int(start_hour), minute=int(start_minute))
@@ -97,4 +101,4 @@ def create_perfektions() -> List[DanceEvent]:
 
 
 def download_chris() -> List[DanceEvent]:
-    return download_chris_events() + create_perfektions()
+    return [e for e in download_chris_events() + create_perfektions() if e is not None]
