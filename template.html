@@ -2,7 +2,6 @@
 <html>
 
 <head>
-    <!-- FIXME: Add social meta tags -->
     <meta charset="UTF-8">
     <link rel="icon" href="logo32.png" type="image/png">
     <link rel="icon" href="logo.svg" type="image/svg+xml">
@@ -65,22 +64,8 @@
             <h2 class="text-2xl font-bold">Kalender Integration</h2>
             <div
                 class="w-full max-w-xl text-center mx-auto my-3 py-2 px-3 card-border card-shadow rounded-xl bg-[var(--background-color)]">
-                <span id="location">[Diese Webseite]/</span>events.ics
+                https://dancetime.flofriday.dev/events.ics
             </div>
-            <script type="text/javascript">
-                function removeEnd(string, substring) {
-                    if (string.endsWith(substring)) {
-                        return string.slice(0, -substring.length);
-                    }
-                    return string;
-                }
-                let f = () => {
-                    document.getElementById("location").innerText = removeEnd(window.location.toString(), "index.html");
-                }
-                document.onload = f;
-                onDOMContentLoaded = f;
-                window.onload = f;
-            </script>
             <p>
                 Über diesen Link können die Events auch als Kalender abonniert
                 werden.
@@ -111,14 +96,13 @@
             </p>
             <ul class="list-disc p-3 pl-8">
                 <li><a class="link" href="/events.csv">CSV (Excel)</a></li>
-                <!-- <li><a class="link" href="/events.ics">iCal (Kalender)</a></li> -->
                 <li><a class="link" href="/events.json">JSON API (für Entwickler)</a></li>
             </ul>
         </div>
     </div>
     <div class="bg-[var(--footer-color)] card-border py-4 border-[var(--text-color)]">
         <div class="content flex justify-between">
-            <span>Erstellt mit ❤️ von der Community</span>
+            <span>Erstellt mit ❤️ von Tänzern</span>
             <span class="text-right">Open Source auf <a class="link"
                     href="https://github.com/flofriday/dancetime">GitHub</a></span>
         </div>

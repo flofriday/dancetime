@@ -9,7 +9,7 @@ import csv
 # but since the csv includes dates for the next 10 years I think we will be
 # good. Also the webscraping will break much faster than this.
 def holidays() -> Set[date]:
-    with open("holyday.csv") as f:
+    with open("holiday.csv") as f:
         reader = csv.DictReader(f)
 
         holidays = {
