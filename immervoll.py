@@ -65,7 +65,7 @@ def download_immervoll() -> List[DanceEvent]:
         )
 
     # Parse perfections
-    perfection_table = table_elements[2]
+    perfection_table = table_elements[3]
     for row in perfection_table.find_all("tr"):
         # Check via the image if that is the right location (and yes this code
         # hurts me as much as it does you)
