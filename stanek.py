@@ -22,7 +22,6 @@ def download_stanek() -> List[DanceEvent]:
     # At the time of writing there is only one event(party) that has an empty
     # link.
     allowed_urls = [
-        "",
         "https://tanzschulestanek.at/tanzkurse/dance-times-perfektion/",
         "https://tanzschulestanek.at/veranstaltungen/",
     ]
@@ -35,24 +34,20 @@ def download_stanek() -> List[DanceEvent]:
             continue
 
         starts_at = datetime.fromisoformat(item["start"])
-
         url = item["url"]
-        if url == "":
-            url = "https://tanzschulestanek.at/veranstaltungen/"
-
         ends_at = None
 
-        # Dance Nights seam to always end at 22h so for this kind of event we
-        # set the end date manually.
+        # Dance Nights seam to always end at 22:30h so for this kind of event
+        # we set the end date manually.
         if "dance night" in item["title"].lower():
-            ends_at = starts_at.replace(hour=22, minute=00)
+            ends_at = starts_at.replace(hour=22, minute=30)
 
         events.append(
             DanceEvent(
                 starts_at=starts_at,
                 ends_at=ends_at,
                 name=item["title"],
-                description="",
+                description="In der Dance Night könnt Ihr in der Tanzschule Stanek ausgiebig tanzen, Eure Tanzkenntnisse vertiefen und einen netten Abend verbringen",
                 dancing_school="Stanek",
                 website=url,
             )
