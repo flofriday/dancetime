@@ -4,7 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 import concurrent.futures
-from util import repeat_weekly, next_weekday
+from timeutil import repeat_weekly, next_weekday
 from holiday import holidays
 import re
 
@@ -76,6 +76,8 @@ def download_chris_events() -> List[DanceEvent]:
     return events
 
 
+# FIXME: This is hacky and doesn't reflect any changes on the website
+# https://www.tanzschulechris.at/perfektionen/tanzcafe_wien_1
 def create_perfektions() -> List[DanceEvent]:
     events = []
     disallowed = holidays()
@@ -91,7 +93,7 @@ def create_perfektions() -> List[DanceEvent]:
                 starts_at=day.replace(hour=20, minute=00),
                 ends_at=day.replace(hour=22, minute=00),
                 name="Perfektion",
-                description="Endlich gibt es sie wieder ... unsere Pefektion in Wien! Jeden Freitag von 20-22 Uhr spielen wir die beste Tanzmusik für euch: Standard, Latein, Boogie, Latino, West Coast Swing, u.v.m. An unserer Bar verwöhnen euch Nando & Maria Viktoria mit coolen Drinks & den besten Cocktails der Stadt. Wir freuen uns auf euer Kommen!",
+                description="Jeden Freitag von 20-22 Uhr spielen wir die beste Tanzmusik für euch: Standard, Latein, Boogie, Latino, West Coast Swing, u.v.m. An unserer Bar verwöhnen euch Nando & Maria Viktoria mit coolen Drinks & den besten Cocktails der Stadt.",
                 dancing_school="Chris",
                 website="https://www.tanzschulechris.at/perfektionen/tanzcafe_wien_1",
             )

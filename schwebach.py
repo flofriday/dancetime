@@ -114,7 +114,7 @@ def download_schwebach_dancecafe() -> List[DanceEvent]:
                 starts_at=datetime.fromtimestamp(int(item["nc_start_timeU"])),
                 ends_at=datetime.fromtimestamp(int(item["nc_end_timeU"])),
                 name=name,
-                description="Der gemütliche Mittelpunkt zum Tanzen und Entspannen!",
+                description="€12,- pro Person\nVoranmeldung erforderlich.\n\nDer gemütliche Mittelpunkt zum Tanzen und Entspannen!",
                 dancing_school="Schwebach",
                 website="https://schwebach.at/tanzcafe/",
             )

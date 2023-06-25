@@ -1,6 +1,6 @@
 from event import DanceEvent
 from typing import List
-from util import next_weekday, repeat_weekly
+from timeutil import next_weekday, repeat_weekly
 
 
 # So the website for the dance perfections isn't easily parsable, so the best
@@ -19,7 +19,7 @@ def create_perfections() -> List[DanceEvent]:
                 starts_at=date.replace(hour=20, minute=00),
                 ends_at=date.replace(hour=23, minute=30),
                 name="Perfektion",
-                description="Abendbeitrag € 5, - / Pers. Offener Tanzabend für alle! Kursteilnahme nicht notwendig.",
+                description="€10,- pro Person\n Offener Tanzabend für alle! Kursteilnahme nicht notwendig.",
                 dancing_school="Svabek",
                 website="https://tanzschulewien.at/Perfektionen/",
             )

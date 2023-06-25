@@ -19,6 +19,10 @@ def clean_name(name: str) -> str:
 
     name = " ".join(map(deupperice, name.split(" ")))
 
+    # Some events end in ...
+    if name.endswith("..."):
+        name = name[:-3]
+
     # And some events should just always be renamed
     rename_table = {
         "Vienna Salsa Splash": "Salsa Splash",
