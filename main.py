@@ -108,7 +108,6 @@ def write_csv(events: List[DanceEvent], metadata: MetaData, folder: str):
 
 
 def write_json(events: List[DanceEvent], metadata: MetaData, folder: str):
-
     # A helper function to serialize datetime
     def defaultconverter(o):
         if isinstance(o, datetime):
@@ -175,7 +174,7 @@ def write_ics(events: List[DanceEvent], metadata: MetaData, folder: str):
         ics_event = icalendar.Event()
 
         # Generate a UUID
-        event_uuid = uuid.uuid4()
+        event_uuid = str(uuid.uuid4()) + "@dancetime.flofriday.dev"
 
         # Set the event properties
         ics_event.add("uid", event_uuid)
