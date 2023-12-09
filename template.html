@@ -1,113 +1,150 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-
-<head>
-    <meta charset="UTF-8">
-    <link rel="icon" href="logo32.png" type="image/png">
-    <link rel="icon" href="logo.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="logo180.png">
-    <meta name="description" content="Finde alle Tanzevents und Perfektionen in Wien.">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="logo32.png" type="image/png" />
+    <link rel="icon" href="logo.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="logo180.png" />
+    <meta
+      name="description"
+      content="Finde alle Tanzevents und Perfektionen in Wien."
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;0,700;1,500&display=swap"
-        rel="stylesheet">
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;0,700;1,500&display=swap"
+      rel="stylesheet"
+    />
 
-    <link href="index.css" rel="stylesheet">
+    <link href="index.css" rel="stylesheet" />
     <title>DanceTime</title>
-</head>
+  </head>
 
-<body class="max-w-full min-h-max">
+  <body class="max-w-full min-h-max">
     <div class="text-center font-bold pt-16 pb-16">
-        <h1 class="text-6xl pb-4 px-4">
-            DanceTime
-        </h1>
-        <div class="px-4">
-            Finde alle Tanzevents und Perfektionen in Wien.
-        </div>
+      <h1 class="text-6xl pb-4 px-4">DanceTime</h1>
+      <div class="px-4">Finde alle Tanzevents und Perfektionen in Wien.</div>
     </div>
 
     <div class="relative w-full">
+      <div
+        class="absolute top-4 h-full w-full bg-[var(--background-accent-color)] border-x-2 border-t-2 rounded-t-3xl border-[var(--text-color)]"
+      ></div>
+      <div class="relative w-full px-5 mb-2">
         <div
-            class="absolute top-4 h-full w-full bg-[var(--background-accent-color)] border-x-2 border-t-2 rounded-t-3xl border-[var(--text-color)]">
+          class="rounded-full mr-auto ml-auto px-2 w-fit mb-5 h-8 bg-[var(--accent1-color)] text-center text-sm flex items-center card-border card-shadow"
+        >
+          Aktualisiert am: {{metadata.crawled_at.strftime('%d.%m.%Y um %H:%M')}}
         </div>
-        <div class="relative w-full px-5 mb-2">
-            <div
-                class="rounded-full mr-auto ml-auto px-2 w-fit mb-5 h-8 bg-[var(--accent1-color)] text-center text-sm flex items-center card-border card-shadow">
-                Aktualisiert am: {{metadata.crawled_at.strftime('%d.%m.%Y um %H:%M')}}
+
+        {% for event in events %}
+        <a
+          href="{{event.website}}"
+          class="block w-full bg-[var(--background-color)] rounded-2xl card-border card-shadow pt-2 pb-2.5 px-4 mb-5 last:mb-4 max-w-xl mx-auto"
+        >
+          <div class="text-lg mb-0.5">{{event.name}}</div>
+          <div
+            class="flex justify-between text-sm text-[var(--text-secondary-color)]"
+          >
+            <div>
+              <span class="pr-1.5">{{format_date(event.starts_at)}}</span>
+              <span
+                >{{event.starts_at.strftime('%H:%M')}} -
+                {{event.ends_at.strftime('%H:%M') if event.ends_at else
+                "unbekannt"}}</span
+              >
             </div>
+            <span>{{event.dancing_school}}</span>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+    <div
+      class="h-5 w-full bg-[var(--background-accent-color)] border-x-2 border-[var(--text-color)]"
+    >
+      <!-- This is just an extra padding -->
+    </div>
 
-            {% for event in events %}
-            <a href="{{event.website}}"
-                class="block w-full bg-[var(--background-color)] rounded-2xl card-border card-shadow pt-2 pb-2.5 px-4 mb-5 last:mb-4 max-w-xl mx-auto">
-                <div class="text-lg mb-0.5">{{event.name}}</div>
-                <div class="flex justify-between text-sm text-[var(--text-secondary-color)]">
-                    <div>
-                        <span class="pr-1.5">{{format_date(event.starts_at)}}</span>
-                        <span>{{event.starts_at.strftime('%H:%M')}} -
-                            {{event.ends_at.strftime('%H:%M') if event.ends_at else "unbekannt"}}</span>
-                    </div>
-                    <span>{{event.dancing_school}}</span>
-                </div>
-            </a>
-            {% endfor %}
-
+    <div
+      class="bg-[var(--accent1-color)] card-border border-b-0 py-4 border-[var(--text-color)]"
+    >
+      <div class="content">
+        <h2 class="text-2xl font-bold">Kalender Integration</h2>
+        <img src="/calendar.png" />
+        <div
+          class="w-full max-w-xl text-center mx-auto mb-3 py-2 px-3 card-border card-shadow rounded-xl bg-[var(--background-color)]"
+        >
+          https://dancetime.flofriday.dev/events.ics
         </div>
+        <p>
+          Über diesen Link können die Events auch als Kalender abonniert werden.
+          <br />
+          Hier sind Anleitungen für ein paar Apps um ics Kalender einzubinden:
+        </p>
+        <ul class="list-disc p-3 pl-8">
+          <li>
+            <a
+              class="link"
+              href="https://support.apple.com/de-de/guide/iphone/iph3d1110d4/ios"
+              >iPhone Kalender</a
+            >
+          </li>
+          <li>
+            <a
+              class="link"
+              href="https://support.apple.com/de-de/guide/calendar/icl1022/mac"
+              >macOS Kalender</a
+            >
+          </li>
+          <li>
+            <a
+              class="link"
+              href="https://support.google.com/calendar/answer/37100?hl=de&co=GENIE.Platform%3DDesktop&oco=1"
+              >Google Kalender</a
+            >
+          </li>
+          <li>
+            <a
+              class="link"
+              href="https://support.microsoft.com/de-de/office/importieren-oder-abonnieren-eines-kalenders-in-outlook-com-cff1429c-5af6-41ec-a5b4-74f2c278e98c"
+              >Outlook Kalender</a
+            >
+          </li>
+        </ul>
+      </div>
     </div>
-    <div class="h-5 w-full bg-[var(--background-accent-color)] border-x-2 border-[var(--text-color)]">
-        <!-- This is just an extra padding -->
+    <div
+      class="bg-[var(--download-color)] card-border border-b-0 py-4 border-[var(--text-color)]"
+    >
+      <div class="content">
+        <h2 class="text-2xl font-bold">Herunterladen</h2>
+        <p>
+          Diese Webseite sammelt jede Stunde Events automatisch. Diese werden
+          nicht nur hier angzeigt sondern können auch in den folgenden Formaten
+          heruntergeladen werden:
+        </p>
+        <ul class="list-disc p-3 pl-8">
+          <li><a class="link" href="/events.csv">CSV (Excel)</a></li>
+          <li>
+            <a class="link" href="/events.json">JSON API (für Entwickler)</a>
+          </li>
+        </ul>
+      </div>
     </div>
-
-    <div class="bg-[var(--accent1-color)] card-border border-b-0 py-4 border-[var(--text-color)]">
-        <div class="content">
-            <h2 class="text-2xl font-bold">Kalender Integration</h2>
-            <div
-                class="w-full max-w-xl text-center mx-auto my-3 py-2 px-3 card-border card-shadow rounded-xl bg-[var(--background-color)]">
-                https://dancetime.flofriday.dev/events.ics
-            </div>
-            <p>
-                Über diesen Link können die Events auch als Kalender abonniert
-                werden.
-                <br>
-                Hier sind Anleitungen für ein paar Apps um ics Kalender
-                einzubinden:
-            </p>
-            <ul class="list-disc p-3 pl-8">
-                <li><a class="link" href="https://support.apple.com/de-de/guide/iphone/iph3d1110d4/ios">iPhone
-                        Kalender</a></li>
-                <li><a class="link" href="https://support.apple.com/de-de/guide/calendar/icl1022/mac">macOS Kalender</a>
-                </li>
-                <li><a class="link"
-                        href="https://support.google.com/calendar/answer/37100?hl=de&co=GENIE.Platform%3DDesktop&oco=1">Google
-                        Kalender</a></li>
-                <li><a class="link"
-                        href="https://support.microsoft.com/de-de/office/importieren-oder-abonnieren-eines-kalenders-in-outlook-com-cff1429c-5af6-41ec-a5b4-74f2c278e98c">Outlook
-                        Kalender</a></li>
-            </ul>
-        </div>
+    <div
+      class="bg-[var(--footer-color)] card-border py-4 border-[var(--text-color)]"
+    >
+      <div class="content flex justify-between">
+        <span>Erstellt mit ❤️ von Tänzern</span>
+        <span class="text-right"
+          >Open Source auf
+          <a class="link" href="https://github.com/flofriday/dancetime"
+            >GitHub</a
+          ></span
+        >
+      </div>
     </div>
-    <div class="bg-[var(--download-color)] card-border border-b-0 py-4 border-[var(--text-color)]">
-        <div class="content">
-            <h2 class="text-2xl font-bold">Herunterladen</h2>
-            <p>Diese Webseite sammelt jede Stunde Events automatisch. Diese
-                werden nicht nur hier angzeigt sondern können auch in den
-                folgenden Formaten heruntergeladen werden:
-            </p>
-            <ul class="list-disc p-3 pl-8">
-                <li><a class="link" href="/events.csv">CSV (Excel)</a></li>
-                <li><a class="link" href="/events.json">JSON API (für Entwickler)</a></li>
-            </ul>
-        </div>
-    </div>
-    <div class="bg-[var(--footer-color)] card-border py-4 border-[var(--text-color)]">
-        <div class="content flex justify-between">
-            <span>Erstellt mit ❤️ von Tänzern</span>
-            <span class="text-right">Open Source auf <a class="link"
-                    href="https://github.com/flofriday/dancetime">GitHub</a></span>
-        </div>
-    </div>
-
-</body>
-
+  </body>
 </html>

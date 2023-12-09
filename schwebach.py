@@ -19,6 +19,9 @@ def clean_name(name: str) -> str:
         name,
     )[0].strip()
 
+    if name.endswith(" - Schwebachs Tanzparty"):
+        name = name.removesuffix(" - Schwebachs Tanzparty")
+
     return name
 
 
