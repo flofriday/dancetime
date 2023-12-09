@@ -23,7 +23,6 @@ from kopetzky import download_kopetzky
 from rueff import download_rueff
 from schwebach import download_schwebach
 from stanek import download_stanek
-from svabek import download_svabek
 import inspect
 
 
@@ -43,7 +42,6 @@ def download_events() -> Tuple[List[DanceEvent], MetaData]:
         ("Rueff", download_rueff),
         ("Schwebach", download_schwebach),
         ("Stanek", download_stanek),
-        ("Svabek", download_svabek),
         ("Kopetzky", download_kopetzky),
     ]
 
