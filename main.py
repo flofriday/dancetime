@@ -233,7 +233,13 @@ def main():
     write_ics(events, metadata, args.output)
 
     # Create the Webpage which needs some static files
-    static_files = ["index.css", "logo32.png", "logo180.png", "logo.svg"]
+    static_files = [
+        "index.css",
+        "logo32.png",
+        "logo180.png",
+        "logo.svg",
+        "calendar.png",
+    ]
     for file in static_files:
         try:
             shutil.copy(file, os.path.join(args.output, file))
