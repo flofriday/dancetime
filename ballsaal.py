@@ -1,5 +1,4 @@
 from event import DanceEvent
-from typing import List
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
@@ -38,7 +37,7 @@ def clean_name(name: str) -> str:
 # because only there it says when the event will end. That is a bit of
 # work so we are doing it here in a separate function.
 def add_ends_at(event: DanceEvent):
-    response = requests.get(event.website)
+    response = requests.get(event.website, timeout=10)
     response.raise_for_status()
     html = response.text
 
@@ -58,7 +57,9 @@ def add_ends_at(event: DanceEvent):
 # For ballsaal.at we need to download and parse html. This is more tedious than
 # a JSON API but at least the format is very consistent.
 def download_ballsaal() -> list[DanceEvent]:
-    response = requests.get("https://www.ballsaal.at/termine_tickets/?no_cache=1")
+    response = requests.get(
+        "https://www.ballsaal.at/termine_tickets/?no_cache=1", timeout=10
+    )
     response.raise_for_status()
 
     soup = BeautifulSoup(response.text, features="html.parser")
@@ -85,6 +86,6 @@ def download_ballsaal() -> list[DanceEvent]:
 
     # Add the ends_at to each event event if
     with concurrent.futures.ThreadPoolExecutor() as executor:
-        events = list(executor.map(lambda e: add_ends_at(e), events))
+        events = list(executor.map(add_ends_at, events))
 
     return events

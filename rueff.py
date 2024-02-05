@@ -7,7 +7,9 @@ from timeutil import Weekday, remove_events_between, weekly_event
 
 # Download the next dance breakfast from the website
 def download_rueff_breakfast() -> list[DanceEvent]:
-    response = requests.get("https://www.tanzschulerueff.at/fruehstueck.htm")
+    response = requests.get(
+        "https://www.tanzschulerueff.at/fruehstueck.htm", timeout=10
+    )
     response.raise_for_status()
 
     soup = BeautifulSoup(response.text, "html.parser")

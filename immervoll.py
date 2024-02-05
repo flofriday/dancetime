@@ -26,7 +26,7 @@ def parse_datetimes(text: str) -> Tuple[datetime, datetime]:
 
 
 def download_immervoll() -> list[DanceEvent]:
-    response = requests.get("https://www.tanzschule-immervoll.at/events/")
+    response = requests.get("https://www.tanzschule-immervoll.at/events/", timeout=10)
     response.raise_for_status()
 
     soup = BeautifulSoup(response.text, features="html.parser")

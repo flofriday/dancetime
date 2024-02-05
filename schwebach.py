@@ -13,7 +13,7 @@ def clean_name(name: str) -> str:
     # These are just noise for our usage though because we display the date and
     # time anyway.
     name = re.subn(
-        "([0-9]{4}|\([a-zA-Z]{2}\)|Jänner|Februar|März|April|Mai|Juni|Juli|August|September|Oktober|November|Dezember)",
+        r"([0-9]{4}|\([a-zA-Z]{2}\)|Jänner|Februar|März|April|Mai|Juni|Juli|August|September|Oktober|November|Dezember)",
         "",
         name,
     )[0].strip()
@@ -28,7 +28,8 @@ def clean_name(name: str) -> str:
 # the events, so instead of parsing html we can just call the API.
 def download_schwebach_events() -> list[DanceEvent]:
     response = requests.get(
-        "https://schwebach.at/wp-content/plugins/sieglsolutions_masterPlugin/getData/getEvents.php"
+        "https://schwebach.at/wp-content/plugins/sieglsolutions_masterPlugin/getData/getEvents.php",
+        timeout=10,
     )
     response.raise_for_status()
     data = response.json()
@@ -94,7 +95,7 @@ def download_schwebach_dancecafe() -> list[DanceEvent]:
     headers = {
         "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
     }
-    response = requests.post(url, headers=headers, data=payload)
+    response = requests.post(url, headers=headers, data=payload, timeout=10)
     response.raise_for_status()
     data = response.json()
 

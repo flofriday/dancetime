@@ -21,7 +21,7 @@ def parse_time(text: str) -> Tuple[int, int]:
 
 
 def download_chris_event(url: str) -> Optional[DanceEvent]:
-    response = requests.get(url)
+    response = requests.get(url, timeout=10)
     response.raise_for_status()
 
     soup = BeautifulSoup(response.text, features="html.parser")
@@ -59,7 +59,7 @@ def download_chris_event(url: str) -> Optional[DanceEvent]:
 # seperatly.
 def download_chris_events() -> list[DanceEvent]:
     response = requests.get(
-        "https://www.tanzschulechris.at/perfektionen/tanzcafe_wien_1"
+        "https://www.tanzschulechris.at/perfektionen/tanzcafe_wien_1", timeout=10
     )
     response.raise_for_status()
 
@@ -71,7 +71,7 @@ def download_chris_events() -> list[DanceEvent]:
     ]
 
     with concurrent.futures.ThreadPoolExecutor() as executor:
-        events = list(executor.map(lambda l: download_chris_event(l), event_links))
+        events = list(executor.map(download_chris_event, event_links))
 
     return events
 

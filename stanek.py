@@ -12,7 +12,8 @@ def download_stanek() -> list[DanceEvent]:
     start_date = date.today()
     end_date = start_date + timedelta(weeks=9)
     response = requests.get(
-        f"https://tanzschulestanek.at/wp-content/plugins/ts_kurse/api/ts_kalender.php?start={start_date.isoformat()}&end={end_date.isoformat()}"
+        f"https://tanzschulestanek.at/wp-content/plugins/ts_kurse/api/ts_kalender.php?start={start_date.isoformat()}&end={end_date.isoformat()}",
+        timeout=10,
     )
     response.raise_for_status()
     data = response.json()

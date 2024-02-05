@@ -1,6 +1,5 @@
 from datetime import date, timedelta
 from functools import cache
-from typing import Set
 import csv
 
 
@@ -10,11 +9,11 @@ import csv
 # but since the csv includes dates for the next 10 years I think we will be
 # good. Also the webscraping will break much faster than this.
 @cache
-def holidays() -> Set[date]:
-    with open("holiday.csv") as f:
+def holidays() -> set[date]:
+    with open("holiday.csv", encoding="utf-8") as f:
         reader = csv.DictReader(f)
 
-        holidays = {
+        return {
             day
             for row in reader
             if row["TYP"] == "HF"
@@ -22,5 +21,3 @@ def holidays() -> Set[date]:
             < (day := date.fromisoformat(row["DATUM"]))
             < (date.today() + timedelta(days=365))
         }
-
-        return holidays

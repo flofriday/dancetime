@@ -57,10 +57,11 @@ def download_events() -> Tuple[list[DanceEvent], MetaData]:
 
         for result in concurrent.futures.as_completed(results):
             try:
+                new_events = result.result()
                 print(
-                    f"Downloaded {name_map[result]} in {(datetime.now() - crawled_at).total_seconds():.2f}s"
+                    f"Downloaded {name_map[result]} \tin {(datetime.now() - crawled_at).total_seconds():.2f}s \t({len(new_events)} events)"
                 )
-                events += result.result()
+                events += new_events
             except HTTPError as e:
                 status = e.response.status_code
                 url = e.request.url
@@ -91,7 +92,7 @@ def download_events() -> Tuple[list[DanceEvent], MetaData]:
 
 def write_csv(events: list[DanceEvent], metadata: MetaData, folder: str):
     csv_path = os.path.join(folder, "events.csv")
-    with open(csv_path, "w") as csvfile:
+    with open(csv_path, "w", encoding="utf-8") as csvfile:
         writer = csv.writer(csvfile, delimiter=",")
         writer.writerow(
             ["Starts at", "Ends at", "Name", "Description", "Dancing School", "Website"]
@@ -127,7 +128,7 @@ def write_json(events: list[DanceEvent], metadata: MetaData, folder: str):
     }
 
     json_path = os.path.join(folder, "events.json")
-    with open(json_path, "w") as json_file:
+    with open(json_path, "w", encoding="utf-8") as json_file:
         json.dump(data, json_file, indent=2, default=defaultconverter)
 
 
@@ -144,7 +145,7 @@ def write_html(events: list[DanceEvent], metadata: MetaData, folder: str):
 
         return d.strftime("%d.%m.%Y") + " " + days[d.weekday()] + "."
 
-    with open("template.html") as template_html:
+    with open("template.html", encoding="utf-8") as template_html:
         template = Template(
             template_html.read(),
             autoescape=select_autoescape(
@@ -155,7 +156,7 @@ def write_html(events: list[DanceEvent], metadata: MetaData, folder: str):
         template.globals["format_date"] = format_date
 
     index_path = os.path.join(folder, "index.html")
-    with open(index_path, "w") as index:
+    with open(index_path, "w", encoding="utf-8") as index:
         index.write(
             template.render(
                 events=events,
@@ -164,7 +165,7 @@ def write_html(events: list[DanceEvent], metadata: MetaData, folder: str):
         )
 
 
-def write_ics(events: list[DanceEvent], metadata: MetaData, folder: str):
+def write_ics(events: list[DanceEvent], _: MetaData, folder: str):
     # Create a new calendar
     cal = icalendar.Calendar()
     cal.add("prodid", "-//DanceTime//flofriday//")
@@ -251,7 +252,7 @@ def main():
 
     # Write final statistics
     print(
-        f"Created {metadata.count} events in {metadata.duration.total_seconds():.2f}s."
+        f"Created {metadata.count} events in {metadata.duration.total_seconds():.2f}s. 💃✨"
     )
 
 
