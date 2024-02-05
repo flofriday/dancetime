@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 from dataclasses import dataclass
-from typing import List, Tuple
+from typing import Tuple
 import os
 import csv
 import json
@@ -23,6 +23,7 @@ from kopetzky import download_kopetzky
 from rueff import download_rueff
 from schwebach import download_schwebach
 from stanek import download_stanek
+from strobl import download_strobl
 import inspect
 
 
@@ -31,10 +32,10 @@ class MetaData:
     count: int
     crawled_at: datetime
     duration: timedelta
-    error_messages: List[str]
+    error_messages: list[str]
 
 
-def download_events() -> Tuple[List[DanceEvent], MetaData]:
+def download_events() -> Tuple[list[DanceEvent], MetaData]:
     downloaders = [
         ("Ballsaal", download_ballsaal),
         ("Chris", download_chris),
@@ -42,6 +43,7 @@ def download_events() -> Tuple[List[DanceEvent], MetaData]:
         ("Rueff", download_rueff),
         ("Schwebach", download_schwebach),
         ("Stanek", download_stanek),
+        ("Strobl", download_strobl),
         ("Kopetzky", download_kopetzky),
     ]
 
@@ -87,7 +89,7 @@ def download_events() -> Tuple[List[DanceEvent], MetaData]:
     return events, metadata
 
 
-def write_csv(events: List[DanceEvent], metadata: MetaData, folder: str):
+def write_csv(events: list[DanceEvent], metadata: MetaData, folder: str):
     csv_path = os.path.join(folder, "events.csv")
     with open(csv_path, "w") as csvfile:
         writer = csv.writer(csvfile, delimiter=",")
@@ -107,7 +109,7 @@ def write_csv(events: List[DanceEvent], metadata: MetaData, folder: str):
             )
 
 
-def write_json(events: List[DanceEvent], metadata: MetaData, folder: str):
+def write_json(events: list[DanceEvent], metadata: MetaData, folder: str):
     # A helper function to serialize datetime
     def defaultconverter(o):
         if isinstance(o, datetime):
@@ -129,7 +131,7 @@ def write_json(events: List[DanceEvent], metadata: MetaData, folder: str):
         json.dump(data, json_file, indent=2, default=defaultconverter)
 
 
-def write_html(events: List[DanceEvent], metadata: MetaData, folder: str):
+def write_html(events: list[DanceEvent], metadata: MetaData, folder: str):
     def format_date(d: datetime) -> str:
         if d.date() == datetime.now().date():
             return "Heute"
@@ -162,7 +164,7 @@ def write_html(events: List[DanceEvent], metadata: MetaData, folder: str):
         )
 
 
-def write_ics(events: List[DanceEvent], metadata: MetaData, folder: str):
+def write_ics(events: list[DanceEvent], metadata: MetaData, folder: str):
     # Create a new calendar
     cal = icalendar.Calendar()
     cal.add("prodid", "-//DanceTime//flofriday//")

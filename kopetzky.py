@@ -1,6 +1,5 @@
 import dateparser
 from event import DanceEvent
-from typing import List
 from timeutil import Weekday, weekly_event
 
 
@@ -10,7 +9,7 @@ from timeutil import Weekday, weekly_event
 # FIXME: yes this whole approach is a bit hacky and means that if the content
 # on the website changes we need to change code. Even worse we probably won't
 # notice that the website changes.
-def create_perfections() -> List[DanceEvent]:
+def create_perfections() -> list[DanceEvent]:
     events = []
     # Every saturday and sunday evening
     for weekday in [Weekday.SAT, Weekday.SUN]:
@@ -29,5 +28,5 @@ def create_perfections() -> List[DanceEvent]:
     return events
 
 
-def download_kopetzky() -> List[DanceEvent]:
+def download_kopetzky() -> list[DanceEvent]:
     return create_perfections()

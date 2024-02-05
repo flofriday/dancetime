@@ -1,5 +1,5 @@
 from event import DanceEvent
-from typing import List, Tuple, Optional
+from typing import Tuple, Optional
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
@@ -57,7 +57,7 @@ def download_chris_event(url: str) -> Optional[DanceEvent]:
 # event overview doesn't have all the events information. So we first
 # need to gather the links for each individual event and then download them
 # seperatly.
-def download_chris_events() -> List[DanceEvent]:
+def download_chris_events() -> list[DanceEvent]:
     response = requests.get(
         "https://www.tanzschulechris.at/perfektionen/tanzcafe_wien_1"
     )
@@ -78,7 +78,7 @@ def download_chris_events() -> List[DanceEvent]:
 
 # FIXME: This is hacky and doesn't reflect any changes on the website
 # https://www.tanzschulechris.at/perfektionen/tanzcafe_wien_1
-def create_perfektions() -> List[DanceEvent]:
+def create_perfektions() -> list[DanceEvent]:
     # Every Friday from 20-22h, except on holidays
     return weekly_event(
         Weekday.FRI,
@@ -94,5 +94,5 @@ def create_perfektions() -> List[DanceEvent]:
     )
 
 
-def download_chris() -> List[DanceEvent]:
+def download_chris() -> list[DanceEvent]:
     return [e for e in download_chris_events() + create_perfektions() if e is not None]

@@ -1,5 +1,5 @@
 from event import DanceEvent
-from typing import List, Tuple
+from typing import Tuple
 import requests
 from bs4 import BeautifulSoup
 import re
@@ -25,7 +25,7 @@ def parse_datetimes(text: str) -> Tuple[datetime, datetime]:
     )
 
 
-def download_immervoll() -> List[DanceEvent]:
+def download_immervoll() -> list[DanceEvent]:
     response = requests.get("https://www.tanzschule-immervoll.at/events/")
     response.raise_for_status()
 

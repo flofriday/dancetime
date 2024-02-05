@@ -57,7 +57,7 @@ def add_ends_at(event: DanceEvent):
 
 # For ballsaal.at we need to download and parse html. This is more tedious than
 # a JSON API but at least the format is very consistent.
-def download_ballsaal() -> List[DanceEvent]:
+def download_ballsaal() -> list[DanceEvent]:
     response = requests.get("https://www.ballsaal.at/termine_tickets/?no_cache=1")
     response.raise_for_status()
 

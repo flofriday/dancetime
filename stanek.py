@@ -1,4 +1,3 @@
-from typing import List
 from event import DanceEvent
 from datetime import datetime, timedelta, date
 import requests
@@ -8,7 +7,7 @@ import requests
 # janky to parse. But luckily there is the calendar which gets it's events from
 # the server via json. So let's just pretend we are a weird calendar and we
 # need some events.
-def download_stanek() -> List[DanceEvent]:
+def download_stanek() -> list[DanceEvent]:
     # Calculate the dates and make the request
     start_date = date.today()
     end_date = start_date + timedelta(weeks=9)

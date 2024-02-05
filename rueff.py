@@ -1,5 +1,4 @@
 from event import DanceEvent
-from typing import List
 import requests
 from bs4 import BeautifulSoup
 from dateparser import parse
@@ -7,7 +6,7 @@ from timeutil import Weekday, remove_events_between, weekly_event
 
 
 # Download the next dance breakfast from the website
-def download_rueff_breakfast() -> List[DanceEvent]:
+def download_rueff_breakfast() -> list[DanceEvent]:
     response = requests.get("https://www.tanzschulerueff.at/fruehstueck.htm")
     response.raise_for_status()
 
@@ -46,7 +45,7 @@ def download_rueff_breakfast() -> List[DanceEvent]:
 # FIXME: yes this whole approach is a bit hacky and means that if the content
 # on the website changes we need to change code. Even worse we probably won't
 # notice that the website changes.
-def create_perfections() -> List[DanceEvent]:
+def create_perfections() -> list[DanceEvent]:
     events = []
 
     # Every tuesday evening
@@ -90,7 +89,7 @@ def create_perfections() -> List[DanceEvent]:
 
     # Special timeslot for semester holidays 2024
     events = remove_events_between(
-        parse("2024-02-05"), parse("2024-02-11 23:59"), events
+        parse("2024-02-05 00:00"), parse("2024-02-11 23:59"), events
     )
     semester_perfections = [
         ("2024-02-05 19:30", "2024-02-05 22:00"),
@@ -114,5 +113,5 @@ def create_perfections() -> List[DanceEvent]:
     return events
 
 
-def download_rueff() -> List[DanceEvent]:
+def download_rueff() -> list[DanceEvent]:
     return download_rueff_breakfast() + create_perfections()
