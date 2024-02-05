@@ -14,14 +14,13 @@ crawls all of them normalizes them into a uniform format and outputs them as
 html, csv, json and as iCalendar to embed in your calendar.
 
 At the moment it downloads from:
-- [Ballsaal](https://www.ballsaal.at/termine_tickets/?no_cache=1)
+- [Ballsaal (Kraml)](https://www.ballsaal.at/termine_tickets/?no_cache=1)
 - [Chris](https://www.tanzschulechris.at/perfektionen/tanzcafe_wien_1)
 - [Immervoll](https://www.tanzschule-immervoll.at/events/)
 - [Kopetzky](https://kopetzky.at/Perfektion)
 - [Rueff](https://tanzschulerueff.at/)
 - [Schwebach](https://schwebach.at/events/)
 - [Stanek](https://tanzschulestanek.at/)
-- [Svabek](https://tanzschulewien.at/)
 
 ## Build it yourself
 
