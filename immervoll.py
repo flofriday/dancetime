@@ -10,7 +10,7 @@ from datetime import datetime
 # which is quite common on the page.
 def parse_datetimes(text: str) -> Tuple[datetime, datetime]:
     date_text, start_text, end_text = re.search(
-        ", ([0-9\.]+) ([0-9:]+) - ([0-9:]+) Uhr", text
+        ", ([0-9\\.]+) ([0-9:]+) - ([0-9:]+) Uhr", text
     ).groups()
 
     day = datetime.strptime(date_text, "%d.%m.%Y")
