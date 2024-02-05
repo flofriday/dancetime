@@ -21,6 +21,7 @@ At the moment it downloads from:
 - [Rueff](https://tanzschulerueff.at/)
 - [Schwebach](https://schwebach.at/events/)
 - [Stanek](https://tanzschulestanek.at/)
+- [Strobl](https://www.tanzschule-strobl.at/perfektion.html)
 
 ## Build it yourself
 
