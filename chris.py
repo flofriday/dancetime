@@ -4,9 +4,9 @@ import requests
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 import concurrent.futures
-from timeutil import repeat_weekly, next_weekday
-from holiday import holidays
+from timeutil import Weekday, weekly_event
 import re
+import dateparser
 
 
 # Parses any string that contains either time in the format
@@ -79,27 +79,19 @@ def download_chris_events() -> List[DanceEvent]:
 # FIXME: This is hacky and doesn't reflect any changes on the website
 # https://www.tanzschulechris.at/perfektionen/tanzcafe_wien_1
 def create_perfektions() -> List[DanceEvent]:
-    events = []
-    disallowed = holidays()
-
-    # Every Friday from 20-22h
-    for day in repeat_weekly(next_weekday("Fri"), 9):
-        # Except on holidays
-        if day.date() in disallowed:
-            continue
-
-        events.append(
-            DanceEvent(
-                starts_at=day.replace(hour=20, minute=00),
-                ends_at=day.replace(hour=22, minute=00),
-                name="Perfektion",
-                description="Jeden Freitag von 20-22 Uhr spielen wir die beste Tanzmusik für euch: Standard, Latein, Boogie, Latino, West Coast Swing, u.v.m. An unserer Bar verwöhnen euch Nando & Maria Viktoria mit coolen Drinks & den besten Cocktails der Stadt.",
-                dancing_school="Chris",
-                website="https://www.tanzschulechris.at/perfektionen/tanzcafe_wien_1",
-            )
-        )
-
-    return events
+    # Every Friday from 20-22h, except on holidays
+    return weekly_event(
+        Weekday.FRI,
+        DanceEvent(
+            starts_at=dateparser.parse("20:00"),
+            ends_at=dateparser.parse("22:00"),
+            name="Perfektion",
+            description="Jeden Freitag von 20-22 Uhr spielen wir die beste Tanzmusik für euch: Standard, Latein, Boogie, Latino, West Coast Swing, u.v.m. An unserer Bar verwöhnen euch Nando & Maria Viktoria mit coolen Drinks & den besten Cocktails der Stadt.",
+            dancing_school="Chris",
+            website="https://www.tanzschulechris.at/perfektionen/tanzcafe_wien_1",
+        ),
+        exclude_holiday=True,
+    )
 
 
 def download_chris() -> List[DanceEvent]:

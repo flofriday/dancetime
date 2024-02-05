@@ -1,4 +1,5 @@
 from datetime import date, timedelta
+from functools import cache
 from typing import Set
 import csv
 
@@ -8,6 +9,7 @@ import csv
 # Note: yes this might look as not as sustainable as downloading from an API,
 # but since the csv includes dates for the next 10 years I think we will be
 # good. Also the webscraping will break much faster than this.
+@cache
 def holidays() -> Set[date]:
     with open("holiday.csv") as f:
         reader = csv.DictReader(f)

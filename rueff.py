@@ -2,9 +2,8 @@ from event import DanceEvent
 from typing import List
 import requests
 from bs4 import BeautifulSoup
-import dateparser
-from timeutil import repeat_weekly, next_weekday
-from datetime import datetime
+from dateparser import parse
+from timeutil import Weekday, remove_events_between, weekly_event
 
 
 # Download the next dance breakfast from the website
@@ -25,7 +24,7 @@ def download_rueff_breakfast() -> List[DanceEvent]:
         # The format is: 18.Dezember 2022 / 10:00 - 1300 Uhr
         date_text = option.text
         date_text = date_text.split("-")[0]
-        starts_at = dateparser.parse(date_text, languages=["de"])
+        starts_at = parse(date_text, languages=["de"])
 
         events.append(
             DanceEvent(
@@ -51,41 +50,61 @@ def create_perfections() -> List[DanceEvent]:
     events = []
 
     # Every tuesday evening
-    tuesday = next_weekday("Tue")
-    for date in repeat_weekly(tuesday, 9):
-        events.append(
-            DanceEvent(
-                starts_at=date.replace(hour=20, minute=45),
-                ends_at=date.replace(hour=22, minute=15),
-                name="Perfektion",
-                description="Verbringen Sie einen angenehmen, netten Abend in unseren vielseitigen und beliebten Perfektionen und teilen Sie Ihr Tanzhobby mit Gleichgesinnten.",
-                dancing_school="Rueff",
-                website="https://www.tanzschulerueff.at/perfektionen.htm",
-            )
-        )
-
-    # Every sunday evening
-    sunday = next_weekday("Sun")
-    for date in repeat_weekly(sunday, 9):
-        events.append(
-            DanceEvent(
-                starts_at=date.replace(hour=20, minute=15),
-                ends_at=date.replace(hour=21, minute=45),
-                name="Perfektion",
-                description="Verbringen Sie einen angenehmen, netten Abend in unseren vielseitigen und beliebten Perfektionen und teilen Sie Ihr Tanzhobby mit Gleichgesinnten.",
-                dancing_school="Rueff",
-                website="https://www.tanzschulerueff.at/perfektionen.htm",
-            )
-        )
+    events += weekly_event(
+        Weekday.TUE,
+        DanceEvent(
+            starts_at=parse("20:45"),
+            ends_at=parse("22:15"),
+            name="Perfektion",
+            description="Verbringen Sie einen angenehmen, netten Abend in unseren vielseitigen und beliebten Perfektionen und teilen Sie Ihr Tanzhobby mit Gleichgesinnten.",
+            dancing_school="Rueff",
+            website="https://www.tanzschulerueff.at/perfektionen.htm",
+        ),
+    )
 
     # Every friday afternoon
-    friday = next_weekday("Fri")
-    for date in repeat_weekly(friday, 9):
+    events += weekly_event(
+        Weekday.FRI,
+        DanceEvent(
+            starts_at=parse("16:15"),
+            ends_at=parse("17:34"),
+            name="Afterwork Perfektion",
+            description="Verbringen Sie einen angenehmen, netten Abend in unseren vielseitigen und beliebten Perfektionen und teilen Sie Ihr Tanzhobby mit Gleichgesinnten.",
+            dancing_school="Rueff",
+            website="https://www.tanzschulerueff.at/perfektionen.htm",
+        ),
+    )
+
+    # Every sunday evening
+    events += weekly_event(
+        Weekday.SUN,
+        DanceEvent(
+            starts_at=parse("20:15"),
+            ends_at=parse("21:45"),
+            name="Perfektion",
+            description="Verbringen Sie einen angenehmen, netten Abend in unseren vielseitigen und beliebten Perfektionen und teilen Sie Ihr Tanzhobby mit Gleichgesinnten.",
+            dancing_school="Rueff",
+            website="https://www.tanzschulerueff.at/perfektionen.htm",
+        ),
+    )
+
+    # Special timeslot for semester holidays 2024
+    events = remove_events_between(
+        parse("2024-02-05"), parse("2024-02-11 23:59"), events
+    )
+    semester_perfections = [
+        ("2024-02-05 19:30", "2024-02-05 22:00"),
+        ("2024-02-06 20:45", "2024-02-06 22:15"),
+        ("2024-02-07 19:30", "2024-02-07 22:00"),
+        ("2024-02-08 19:30", "2024-02-05 22:00"),
+        ("2024-02-09 19:30", "2024-02-05 22:00"),
+    ]
+    for starts_at, ends_at in semester_perfections:
         events.append(
             DanceEvent(
-                starts_at=date.replace(hour=16, minute=15),
-                ends_at=date.replace(hour=17, minute=45),
-                name="Afterwork Perfektion",
+                starts_at=parse(starts_at),
+                ends_at=parse(ends_at),
+                name="Perfektion",
                 description="Verbringen Sie einen angenehmen, netten Abend in unseren vielseitigen und beliebten Perfektionen und teilen Sie Ihr Tanzhobby mit Gleichgesinnten.",
                 dancing_school="Rueff",
                 website="https://www.tanzschulerueff.at/perfektionen.htm",
