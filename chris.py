@@ -70,7 +70,9 @@ def download_chris_events() -> list[DanceEvent]:
         "https://www.tanzschulechris.at" + e.find("a")["href"] for e in event_items
     ]
 
-    with concurrent.futures.ThreadPoolExecutor() as executor:
+    with concurrent.futures.ThreadPoolExecutor(
+        max_workers=max(1, len(event_links))
+    ) as executor:
         events = list(executor.map(download_chris_event, event_links))
 
     return events

@@ -85,7 +85,9 @@ def download_ballsaal() -> list[DanceEvent]:
         )
 
     # Add the ends_at to each event event if
-    with concurrent.futures.ThreadPoolExecutor() as executor:
+    with concurrent.futures.ThreadPoolExecutor(
+        max_workers=max(1, len(events))
+    ) as executor:
         events = list(executor.map(add_ends_at, events))
 
     return events

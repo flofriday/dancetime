@@ -50,7 +50,9 @@ def download_events() -> Tuple[list[DanceEvent], MetaData]:
     events = []
     error_messages = []
     crawled_at = datetime.now()
-    with concurrent.futures.ThreadPoolExecutor() as executor:
+    with concurrent.futures.ThreadPoolExecutor(
+        max_workers=len(downloaders)
+    ) as executor:
         results = [executor.submit(downloader[1]) for downloader in downloaders]
 
         name_map = {r: downloaders[i][0] for (i, r) in enumerate(results)}
