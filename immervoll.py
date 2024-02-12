@@ -1,9 +1,11 @@
-from event import DanceEvent
-from typing import Tuple
-import requests
-from bs4 import BeautifulSoup
 import re
 from datetime import datetime
+from typing import Tuple
+
+import requests
+from bs4 import BeautifulSoup
+
+from event import DanceEvent
 
 
 # Parses dates in the format: `Samstag, 21.01.2023 19:30 - 22:15 Uhr`

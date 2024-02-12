@@ -1,12 +1,14 @@
-from event import DanceEvent
-from typing import Tuple, Optional
+import concurrent.futures
+import re
+from datetime import datetime, timedelta
+from typing import Optional, Tuple
+
+import dateparser
 import requests
 from bs4 import BeautifulSoup
-from datetime import datetime, timedelta
-import concurrent.futures
+
+from event import DanceEvent
 from timeutil import Weekday, weekly_event
-import re
-import dateparser
 
 
 # Parses any string that contains either time in the format

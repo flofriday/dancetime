@@ -1,6 +1,7 @@
 from dataclasses import replace
 from datetime import datetime, timedelta
 from enum import Enum
+
 from event import DanceEvent
 from holiday import holidays
 

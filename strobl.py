@@ -1,6 +1,7 @@
+import dateparser
+
 from event import DanceEvent
 from timeutil import Weekday, remove_events_between, weekly_event
-import dateparser
 
 
 # https://www.tanzschule-strobl.at/perfektion.html

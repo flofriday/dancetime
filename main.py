@@ -1,30 +1,31 @@
-from datetime import datetime, timedelta
-from zoneinfo import ZoneInfo
-from dataclasses import dataclass
-from typing import Tuple
-import os
-import csv
-import json
-import concurrent.futures
 import argparse
+import concurrent.futures
+import contextlib
+import csv
+import inspect
+import json
+import os
 import shutil
-from jinja2 import Template, select_autoescape
-import icalendar
-import uuid
-from requests.exceptions import HTTPError, ConnectionError
 import sys
+import uuid
+from dataclasses import dataclass
+from datetime import datetime, timedelta
+from typing import Tuple
 
+import icalendar
+from jinja2 import Template, select_autoescape
+from requests.exceptions import ConnectionError, HTTPError
+from zoneinfo import ZoneInfo
 
-from event import DanceEvent
 from ballsaal import download_ballsaal
 from chris import download_chris
+from event import DanceEvent
 from immervoll import download_immervoll
 from kopetzky import download_kopetzky
 from rueff import download_rueff
 from schwebach import download_schwebach
 from stanek import download_stanek
 from strobl import download_strobl
-import inspect
 
 
 @dataclass
@@ -245,11 +246,11 @@ def main():
         "logo.svg",
         "calendar.png",
     ]
-    for file in static_files:
-        try:
+
+    with contextlib.suppress(shutil.SameFileError):
+        for file in static_files:
             shutil.copy(file, os.path.join(args.output, file))
-        except shutil.SameFileError:
-            pass
+
     write_html(events, metadata, args.output)
 
     # Write final statistics

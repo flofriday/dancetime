@@ -1,7 +1,8 @@
-from event import DanceEvent
 import requests
 from bs4 import BeautifulSoup
 from dateparser import parse
+
+from event import DanceEvent
 from timeutil import Weekday, remove_events_between, weekly_event
 
 

@@ -1,6 +1,6 @@
+import csv
 from datetime import date, timedelta
 from functools import cache
-import csv
 
 
 # Get all holydays from the official federal list from:

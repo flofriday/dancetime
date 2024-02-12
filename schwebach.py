@@ -1,8 +1,10 @@
-from event import DanceEvent
+import re
 from datetime import datetime
+
 import requests
 from bs4 import BeautifulSoup
-import re
+
+from event import DanceEvent
 
 
 def clean_name(name: str) -> str:

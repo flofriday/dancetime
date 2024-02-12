@@ -1,10 +1,12 @@
-from event import DanceEvent
+import concurrent.futures
+from datetime import datetime
+
+import dateparser
 import requests
 from bs4 import BeautifulSoup
-from datetime import datetime
 from dateutil.relativedelta import relativedelta
-import dateparser
-import concurrent.futures
+
+from event import DanceEvent
 
 
 def clean_name(name: str) -> str:

@@ -1,6 +1,8 @@
-from event import DanceEvent
-from datetime import datetime, timedelta, date
+from datetime import date, datetime, timedelta
+
 import requests
+
+from event import DanceEvent
 
 
 # Well, we couldn't really find any API and the Website itself seams a little
