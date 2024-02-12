@@ -190,7 +190,7 @@ def write_ics(events: list[DanceEvent], _: MetaData, folder: str):
         ics_event.add(
             "dtstart", event.starts_at.replace(tzinfo=ZoneInfo("Europe/Vienna"))
         )
-        if event.ends_at != None:
+        if event.ends_at is not None:
             ics_event.add(
                 "dtend", event.ends_at.replace(tzinfo=ZoneInfo("Europe/Vienna"))
             )

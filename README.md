@@ -67,5 +67,5 @@ You can see the systemd configuration in `dancetime.service` and
 
 ## Contributing
 
-Contributions are very welcome. At the moment I only ask you to use black to 
+Contributions are very welcome. At the moment I only ask you to use ruff to 
 format your code. You are awesome 😊🎉

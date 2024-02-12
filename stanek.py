@@ -28,7 +28,7 @@ def download_stanek() -> list[DanceEvent]:
     events = []
     for item in data:
         # Ignore courses that are not open to the public
-        if not item["url"] in allowed_urls:
+        if item["url"] not in allowed_urls:
             continue
 
         starts_at = datetime.fromisoformat(item["start"])
