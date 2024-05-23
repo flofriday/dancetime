@@ -69,7 +69,7 @@ def create_perfections() -> list[DanceEvent]:
         Weekday.FRI,
         DanceEvent(
             starts_at=parse("16:15"),
-            ends_at=parse("17:34"),
+            ends_at=parse("17:45"),
             name="Afterwork Perfektion",
             description="Verbringen Sie einen angenehmen, netten Abend in unseren vielseitigen und beliebten Perfektionen und teilen Sie Ihr Tanzhobby mit Gleichgesinnten.",
             dancing_school="Rueff",
