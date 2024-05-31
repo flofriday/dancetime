@@ -34,16 +34,18 @@ def download_chris_event(url: str) -> Optional[DanceEvent]:
 
     try:
         start_hour, start_minute = parse_time(soup.find(class_="event-starttime").text)
+        starts_at = base_date.replace(hour=int(start_hour), minute=int(start_minute))
     except Exception:
         # We cannot handle events that don't specify at least a starting time
         return None
-    end_hour, end_minute = parse_time(soup.find(class_="event-endtime").text)
 
-    starts_at = base_date.replace(hour=int(start_hour), minute=int(start_minute))
-    ends_at = base_date.replace(hour=int(end_hour), minute=int(end_minute))
-
-    if ends_at < starts_at:
-        ends_at += timedelta(days=1)
+    try:
+        end_hour, end_minute = parse_time(soup.find(class_="event-endtime").text)
+        ends_at = base_date.replace(hour=int(end_hour), minute=int(end_minute))
+        if ends_at < starts_at:
+            ends_at += timedelta(days=1)
+    except AttributeError:
+        ends_at = None
 
     return DanceEvent(
         starts_at=starts_at,

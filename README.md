@@ -1,4 +1,4 @@
-# dancetime 
+# dancetime
 
 ![screenshot](screenshot.png)
 
@@ -6,11 +6,11 @@ A website to find dance events in Vienna.
 
 [Live Website](https://dancetime.flofriday.dev/)
 
-## Features 
+## Features
 
-A couple of my friends and I love to go (ballroom) dancing in Vienna. However, 
+A couple of my friends and I love to go (ballroom) dancing in Vienna. However,
 looking up a couple websites every week can be quite tedious. So this tool
-crawls all of them normalizes them into a uniform format and outputs them as 
+crawls all of them normalizes them into a uniform format and outputs them as
 html, csv, json and as iCalendar to embed in your calendar.
 
 At the moment it downloads from:
@@ -38,7 +38,7 @@ python main.py
 ```
 
 **Note:** While working on the frontend it might be quite handy to add the
-`--watch` flag to the tailwind command so that it will automatically rebuild the 
+`--watch` flag to the tailwind command so that it will automatically rebuild the
 css.
 
 ## Usage
@@ -58,14 +58,19 @@ options:
 We directly deploy the main branch to [dancetime.flofriday.dev](https://dancetime.flofriday.dev)
 with our CI/CD [GitHub Action](https://docs.github.com/en/actions).
 
-On the linux server we have a [systemd](https://systemd.io/) timer setup that 
-runs the script hourly and the generated files are statically hosted with 
+On the linux server we have a [systemd](https://systemd.io/) timer setup that
+runs the script hourly and the generated files are statically hosted with
 [nginx](https://nginx.org/en/).
 
-You can see the systemd configuration in `dancetime.service` and 
+You can see the systemd configuration in `dancetime.service` and
 `dancetime.timer`.
 
 ## Contributing
 
-Contributions are very welcome. At the moment I only ask you to use ruff to 
+Contributions are very welcome. At the moment I only ask you to use ruff to
 format your code. You are awesome 😊🎉
+
+```bash
+ruff format
+ruff check --fix
+```
