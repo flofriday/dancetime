@@ -7,6 +7,7 @@ import json
 import os
 import shutil
 import sys
+import html
 import uuid
 from dataclasses import dataclass
 from datetime import datetime, timedelta
@@ -93,12 +94,27 @@ def download_events() -> Tuple[list[DanceEvent], MetaData]:
     return events, metadata
 
 
+def format_price(price_euro_cent: int) -> str:
+    if price_euro_cent % 100 == 0:
+        return f"€{price_euro_cent//100},-"
+
+    return f"€{price_euro_cent/100:.2f}".replace(".", ",")
+
+
 def write_csv(events: list[DanceEvent], metadata: MetaData, folder: str):
     csv_path = os.path.join(folder, "events.csv")
     with open(csv_path, "w", encoding="utf-8") as csvfile:
         writer = csv.writer(csvfile, delimiter=",")
         writer.writerow(
-            ["Starts at", "Ends at", "Name", "Description", "Dancing School", "Website"]
+            [
+                "Starts at",
+                "Ends at",
+                "Name",
+                "Price",
+                "Description",
+                "Dancing School",
+                "Website",
+            ]
         )
         for event in events:
             writer.writerow(
@@ -106,6 +122,9 @@ def write_csv(events: list[DanceEvent], metadata: MetaData, folder: str):
                     event.starts_at,
                     event.ends_at,
                     event.name,
+                    format_price(event.price_euro_cent)
+                    if event.price_euro_cent
+                    else None,
                     event.description,
                     event.dancing_school,
                     event.website,
@@ -157,6 +176,7 @@ def write_html(events: list[DanceEvent], metadata: MetaData, folder: str):
             ),
         )
         template.globals["format_date"] = format_date
+        template.globals["format_price"] = format_price
 
     index_path = os.path.join(folder, "index.html")
     with open(index_path, "w", encoding="utf-8") as index:
@@ -196,11 +216,16 @@ def write_ics(events: list[DanceEvent], _: MetaData, folder: str):
                 "dtend", event.ends_at.replace(tzinfo=ZoneInfo("Europe/Vienna"))
             )
         ics_event.add("location", event.dancing_school)
-        ics_event.add("description", event.website + "\n\n" + event.description)
+
+        description = event.website + "\n\n"
+        if event.price_euro_cent is not None:
+            description += f"Preis pro Person: {format_price(event.price_euro_cent)}\n"
+        description += event.description
+        ics_event.add("description", description)
         ics_event.add(
             "x-alt-desc;fmttype=text/html",
             '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN><HTML><BODY>\n'
-            f'<a href="{event.website}">Webseite</a><br><br>{event.description}'
+            f'<a href="{event.website}">Webseite</a><br><br>{html.escape(description).replace("\n", "<br>")}'
             "\n</BODY></HTML>",
         )
 

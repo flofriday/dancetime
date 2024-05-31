@@ -59,6 +59,9 @@
                 {{event.ends_at.strftime('%H:%M') if event.ends_at else
                 "unbekannt"}}</span
               >
+              {% if event.price_euro_cent is not none %}
+              <span> ⋅ {{format_price(event.price_euro_cent)}}</span>
+              {% endif %}
             </div>
             <span>{{event.dancing_school}}</span>
           </div>

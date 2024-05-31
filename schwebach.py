@@ -30,10 +30,10 @@ def clean_name(name: str) -> str:
 
     # Some events end with "Schwebach Tanzparty" which is also just unecessary
     name = re.subn(
-           r" - (Schwebachs )?Tanzparty$",
-           "",
-           name,
-       )[0].strip()
+        r" - (Schwebachs )?Tanzparty$",
+        "",
+        name,
+    )[0].strip()
 
     return name
 
@@ -69,6 +69,7 @@ def download_schwebach_events() -> list[DanceEvent]:
                 starts_at=datetime.fromtimestamp(int(item["nc_begin"])),
                 ends_at=datetime.fromtimestamp(int(item["nc_end"])),
                 name=name,
+                price_euro_cent=None,
                 description=description.strip(),
                 dancing_school="Schwebach",
                 website="https://schwebach.at/events/" + item["webroute"],
@@ -131,7 +132,8 @@ def download_schwebach_dancecafe() -> list[DanceEvent]:
                 starts_at=datetime.fromtimestamp(int(item["nc_start_timeU"])),
                 ends_at=datetime.fromtimestamp(int(item["nc_end_timeU"])),
                 name=name,
-                description="€12,- pro Person\nVoranmeldung erforderlich.\n\nDer gemütliche Mittelpunkt zum Tanzen und Entspannen!",
+                price_euro_cent=1200,
+                description="Voranmeldung erforderlich.\n\nDer gemütliche Mittelpunkt zum Tanzen und Entspannen!",
                 dancing_school="Schwebach",
                 website="https://schwebach.at/tanzcafe/",
             )

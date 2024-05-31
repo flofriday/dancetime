@@ -47,10 +47,15 @@ def download_chris_event(url: str) -> Optional[DanceEvent]:
     except AttributeError:
         ends_at = None
 
+    # FIXME: Don't hardcode
+    name = soup.select_one(".header > h2:nth-child(1)").text.strip()
+    price = 700 if name == "Perfektion" else None
+
     return DanceEvent(
         starts_at=starts_at,
         ends_at=ends_at,
-        name=soup.select_one(".header > h2:nth-child(1)").text.strip(),
+        name=name,
+        price_euro_cent=price,
         description=soup.find(class_="news-text-wrap").text.strip(),
         dancing_school="Chris",
         website=url,
@@ -92,6 +97,7 @@ def create_perfektions() -> list[DanceEvent]:
             starts_at=dateparser.parse("20:00"),
             ends_at=dateparser.parse("22:00"),
             name="Perfektion",
+            price_euro_cent=700,
             description="Jeden Freitag von 20-22 Uhr spielen wir die beste Tanzmusik für euch: Standard, Latein, Boogie, Latino, West Coast Swing, u.v.m. An unserer Bar verwöhnen euch Nando & Maria Viktoria mit coolen Drinks & den besten Cocktails der Stadt.",
             dancing_school="Chris",
             website="https://www.tanzschulechris.at/perfektionen/tanzcafe_wien_1",

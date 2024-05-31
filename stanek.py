@@ -47,6 +47,7 @@ def download_stanek() -> list[DanceEvent]:
                 starts_at=starts_at,
                 ends_at=ends_at,
                 name=item["title"],
+                price_euro_cent=None,
                 description="In der Dance Night könnt Ihr in der Tanzschule Stanek ausgiebig tanzen, Eure Tanzkenntnisse vertiefen und einen netten Abend verbringen",
                 dancing_school="Stanek",
                 website=url,

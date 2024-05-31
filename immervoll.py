@@ -60,6 +60,7 @@ def download_immervoll() -> list[DanceEvent]:
                 starts_at=starts_at,
                 ends_at=ends_at,
                 name=name,
+                price_euro_cent=None,
                 description=description,
                 dancing_school="Immervoll",
                 website="https://www.tanzschule-immervoll.at/events/",
@@ -78,12 +79,23 @@ def download_immervoll() -> list[DanceEvent]:
 
         starts_at, ends_at = parse_datetimes(row.text.strip())
 
+        match starts_at.weekday:
+            case 1:
+                # Tuesday it's 15€ per couple
+                price = 1500 // 2
+            case 5:
+                # Saturday it's 17€ per couple
+                price = 1700 // 2
+            case _:
+                price = None
+
         events.append(
             DanceEvent(
                 starts_at=starts_at,
                 ends_at=ends_at,
                 name="Perfektion",
-                description="Altgasse 6, 1130 Wien\nKeine Voranmeldung notwendig. Teilnahme nur paarweise möglich.\nAbendbeitrag pro Paar: EUR 15,00\n\nVerschiedene Tanz- und Übungsabende runden unser Kursangebot ab! Hier kommen Schüler aus allen Kursstufen zusammen und perfektionieren ihr erworbenes Können. Gesellige Abende in unseren Tanzschulen bieten den optimalen Ausklang eines arbeitsreichen Tages.",
+                price_euro_cent=price,
+                description="Altgasse 6, 1130 Wien\nKeine Voranmeldung notwendig. Teilnahme nur paarweise möglich.\nVerschiedene Tanz- und Übungsabende runden unser Kursangebot ab! Hier kommen Schüler aus allen Kursstufen zusammen und perfektionieren ihr erworbenes Können. Gesellige Abende in unseren Tanzschulen bieten den optimalen Ausklang eines arbeitsreichen Tages.",
                 dancing_school="Immervoll",
                 website="https://www.tanzschule-immervoll.at/events/",
             )

@@ -7,6 +7,7 @@ from typing import Optional
 class DanceEvent:
     starts_at: datetime
     name: str
+    price_euro_cent: Optional[int]
     description: str
     dancing_school: str
     website: str

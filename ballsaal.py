@@ -1,3 +1,4 @@
+import re
 import concurrent.futures
 from datetime import datetime
 
@@ -35,10 +36,10 @@ def clean_name(name: str) -> str:
     return name
 
 
-# For the ends_at we need to do a second request to the ticketing website
+# For the ends_at and price we need to do a second request to the ticketing website
 # because only there it says when the event will end. That is a bit of
 # work so we are doing it here in a separate function.
-def add_ends_at(event: DanceEvent):
+def add_fine_detail(event: DanceEvent) -> DanceEvent:
     response = requests.get(event.website, timeout=10)
     response.raise_for_status()
     html = response.text
@@ -51,7 +52,23 @@ def add_ends_at(event: DanceEvent):
     if event.starts_at > event.ends_at:
         event.ends_at += relativedelta(years=1)
 
-    # FIXME: We could also include all prices and wether or not it is full.
+    isAvailable = None
+    price_items = soup.findAll(class_="ticket-price-cell")
+
+    for price_item in price_items:
+        m = re.search(r"€ (\d+),(\d{2})", price_item.text)
+        if m is None:
+            continue
+        price = int(m.groups(0)[0]) * 100 + int(m.groups(0)[1])
+
+        if event.price_euro_cent is None or event.price_euro_cent > price:
+            event.price_euro_cent = price
+
+        if isAvailable is None or isAvailable == False:
+            isAvailable = not ("Ausgebucht" in price_item.text)
+
+    if isAvailable is not None and not isAvailable:
+        event.name += " [ausgebucht]"
 
     return event
 
@@ -80,6 +97,7 @@ def download_ballsaal() -> list[DanceEvent]:
             DanceEvent(
                 starts_at=date,
                 name=name,
+                price_euro_cent=None,
                 description=description,
                 dancing_school="Ballsaal",
                 website=url,
@@ -90,6 +108,6 @@ def download_ballsaal() -> list[DanceEvent]:
     with concurrent.futures.ThreadPoolExecutor(
         max_workers=max(1, len(events))
     ) as executor:
-        events = list(executor.map(add_ends_at, events))
+        events = list(executor.map(add_fine_detail, events))
 
     return events

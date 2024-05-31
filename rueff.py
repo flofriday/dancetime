@@ -1,4 +1,5 @@
 import requests
+import re
 from bs4 import BeautifulSoup
 from dateparser import parse
 
@@ -17,6 +18,14 @@ def download_rueff_breakfast() -> list[DanceEvent]:
     select = soup.find("select", {"name": "Auswahl"})
     options = select.find_all("option")
 
+    price = None
+    full_description = soup.css.select_one(
+        "section.page-section:nth-child(7) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > p:nth-child(2)"
+    )
+    if full_description is not None:
+        m = re.search(r"Kosten pro Person (\d{2}) Euro", full_description.text)
+        price = int(m.groups(0)[0]) * 100
+
     events = []
     for option in options:
         # Ignore the "Termin auswählen"
@@ -33,6 +42,7 @@ def download_rueff_breakfast() -> list[DanceEvent]:
                 starts_at=starts_at,
                 ends_at=starts_at.replace(hour=13, minute=00),
                 name="Tanzfrühstück",
+                price_euro_cent=price,
                 description="Tanzen und frühstücken am Sonntag in der Tanzschule Rueff!",
                 dancing_school="Rueff",
                 website="https://www.tanzschulerueff.at/fruehstueck.htm",
@@ -58,6 +68,7 @@ def create_perfections() -> list[DanceEvent]:
             starts_at=parse("20:45"),
             ends_at=parse("22:15"),
             name="Perfektion",
+            price_euro_cent=500,
             description="Verbringen Sie einen angenehmen, netten Abend in unseren vielseitigen und beliebten Perfektionen und teilen Sie Ihr Tanzhobby mit Gleichgesinnten.",
             dancing_school="Rueff",
             website="https://www.tanzschulerueff.at/perfektionen.htm",
@@ -71,6 +82,7 @@ def create_perfections() -> list[DanceEvent]:
             starts_at=parse("16:15"),
             ends_at=parse("17:45"),
             name="Afterwork Perfektion",
+            price_euro_cent=500,
             description="Verbringen Sie einen angenehmen, netten Abend in unseren vielseitigen und beliebten Perfektionen und teilen Sie Ihr Tanzhobby mit Gleichgesinnten.",
             dancing_school="Rueff",
             website="https://www.tanzschulerueff.at/perfektionen.htm",
@@ -84,34 +96,12 @@ def create_perfections() -> list[DanceEvent]:
             starts_at=parse("20:15"),
             ends_at=parse("21:45"),
             name="Perfektion",
+            price_euro_cent=500,
             description="Verbringen Sie einen angenehmen, netten Abend in unseren vielseitigen und beliebten Perfektionen und teilen Sie Ihr Tanzhobby mit Gleichgesinnten.",
             dancing_school="Rueff",
             website="https://www.tanzschulerueff.at/perfektionen.htm",
         ),
     )
-
-    # Special timeslot for semester holidays 2024
-    events = remove_events_between(
-        parse("2024-02-05 00:00"), parse("2024-02-11 23:59"), events
-    )
-    semester_perfections = [
-        ("2024-02-05 19:30", "2024-02-05 22:00"),
-        ("2024-02-06 20:45", "2024-02-06 22:15"),
-        ("2024-02-07 19:30", "2024-02-07 22:00"),
-        ("2024-02-08 19:30", "2024-02-08 22:00"),
-        ("2024-02-09 19:30", "2024-02-09 22:00"),
-    ]
-    for starts_at, ends_at in semester_perfections:
-        events.append(
-            DanceEvent(
-                starts_at=parse(starts_at),
-                ends_at=parse(ends_at),
-                name="Perfektion",
-                description="Verbringen Sie einen angenehmen, netten Abend in unseren vielseitigen und beliebten Perfektionen und teilen Sie Ihr Tanzhobby mit Gleichgesinnten.",
-                dancing_school="Rueff",
-                website="https://www.tanzschulerueff.at/perfektionen.htm",
-            )
-        )
 
     return events
 
