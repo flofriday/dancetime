@@ -49,8 +49,8 @@ def add_fine_detail(event: DanceEvent) -> DanceEvent:
     event.ends_at = dateparser.parse(date_text, languages=["de", "en"])
 
     # We don't parse the year so, the year it might assume, can be off by one.
-    if event.starts_at > event.ends_at:
-        event.ends_at += relativedelta(years=1)
+    while event.starts_at > event.ends_at:
+        event.ends_at += relativedelta(days=1)
 
     isAvailable = None
     price_items = soup.findAll(class_="ticket-price-cell")
