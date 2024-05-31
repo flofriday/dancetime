@@ -20,8 +20,20 @@ def clean_name(name: str) -> str:
         name,
     )[0].strip()
 
-    if name.endswith(" - Schwebachs Tanzparty"):
-        name = name.removesuffix(" - Schwebachs Tanzparty")
+    # Some events end with the time, which we already have in sepperate fields.
+    # The format looks like: `- Nachmittag 15-18 Uhr`
+    name = re.subn(
+        r" - [A-Za-z]+ \d{2}-\d{2} Uhr$",
+        "",
+        name,
+    )[0].strip()
+
+    # Some events end with "Schwebach Tanzparty" which is also just unecessary
+    name = re.subn(
+           r" - (Schwebachs )?Tanzparty$",
+           "",
+           name,
+       )[0].strip()
 
     return name
 
