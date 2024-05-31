@@ -79,7 +79,7 @@ def download_immervoll() -> list[DanceEvent]:
 
         starts_at, ends_at = parse_datetimes(row.text.strip())
 
-        match starts_at.weekday:
+        match starts_at.weekday():
             case 1:
                 # Tuesday it's 15€ per couple
                 price = 1500 // 2
