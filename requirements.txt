@@ -15,7 +15,7 @@ pytz==2024.1
 pytz-deprecation-shim==0.1.0.post0
 regex==2024.5.15
 requests==2.32.3
-ruff==0.4.6
+ruff==0.4.7
 six==1.16.0
 soupsieve==2.5
 tzdata==2024.1

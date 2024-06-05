@@ -1,10 +1,11 @@
-import requests
 import re
+
+import requests
 from bs4 import BeautifulSoup
 from dateparser import parse
 
 from event import DanceEvent
-from timeutil import Weekday, remove_events_between, weekly_event
+from timeutil import Weekday, weekly_event
 
 
 # Download the next dance breakfast from the website

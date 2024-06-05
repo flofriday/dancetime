@@ -1,5 +1,5 @@
-import re
 import concurrent.futures
+import re
 from datetime import datetime
 
 import dateparser

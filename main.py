@@ -2,12 +2,12 @@ import argparse
 import concurrent.futures
 import contextlib
 import csv
+import html
 import inspect
 import json
 import os
 import shutil
 import sys
-import html
 import uuid
 from dataclasses import dataclass
 from datetime import datetime, timedelta

@@ -1,4 +1,5 @@
 from datetime import date, datetime, timedelta
+from typing import Tuple
 
 import requests
 
@@ -27,15 +28,23 @@ def download_stanek() -> list[DanceEvent]:
     ]
 
     # Convert the json data to events
+    event_keys: set[Tuple[datetime, str]] = set()
     events = []
     for item in data:
         # Ignore courses that are not open to the public
         if item["url"] not in allowed_urls:
             continue
 
+        name = item["title"]
         starts_at = datetime.fromisoformat(item["start"])
         url = item["url"]
         ends_at = None
+
+        # Sometimes the API has duplicates in the events so
+        # see if we already have it and don't insert it then
+        if (starts_at, name) in event_keys:
+            continue
+        event_keys.add((starts_at, name))
 
         # Dance Nights seam to always end at 22:30h so for this kind of event
         # we set the end date manually.
@@ -46,7 +55,7 @@ def download_stanek() -> list[DanceEvent]:
             DanceEvent(
                 starts_at=starts_at,
                 ends_at=ends_at,
-                name=item["title"],
+                name=name,
                 price_euro_cent=None,
                 description="In der Dance Night könnt Ihr in der Tanzschule Stanek ausgiebig tanzen, Eure Tanzkenntnisse vertiefen und einen netten Abend verbringen",
                 dancing_school="Stanek",

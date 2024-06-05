@@ -65,7 +65,11 @@ def download_schwebach_events() -> list[DanceEvent]:
             ).text
 
         price = None
-        if (m := re.search(r"Eintritt: € (\d+),- für externe Gäste", item["nc_description"])) is not None:
+        if (
+            m := re.search(
+                r"Eintritt: € (\d+),- für externe Gäste", item["nc_description"]
+            )
+        ) is not None:
             price = int(m.groups(0)[0]) * 100
 
         events.append(
