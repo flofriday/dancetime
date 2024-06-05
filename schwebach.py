@@ -50,8 +50,8 @@ def download_schwebach_events() -> list[DanceEvent]:
 
     events = []
     for item in data["cdata"]["events"]:
-        # Filter events that are not in Vienna
-        if item["location_bez"] != "Wien":
+        # Filter events that are not in Vienna or not open to public
+        if item["location_bez"] != "Wien" or "Members-Only" in item["nc_description"]:
             continue
 
         # Ceanup the name
@@ -64,12 +64,16 @@ def download_schwebach_events() -> list[DanceEvent]:
                 item["nc_description"], features="html.parser"
             ).text
 
+        price = None
+        if (m := re.search(r"Eintritt: € (\d+),- für externe Gäste", item["nc_description"])) is not None:
+            price = int(m.groups(0)[0]) * 100
+
         events.append(
             DanceEvent(
                 starts_at=datetime.fromtimestamp(int(item["nc_begin"])),
                 ends_at=datetime.fromtimestamp(int(item["nc_end"])),
                 name=name,
-                price_euro_cent=None,
+                price_euro_cent=price,
                 description=description.strip(),
                 dancing_school="Schwebach",
                 website="https://schwebach.at/events/" + item["webroute"],
