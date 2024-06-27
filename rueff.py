@@ -34,8 +34,12 @@ def download_rueff_breakfast() -> list[DanceEvent]:
             continue
 
         # The format is: 18.Dezember 2022 / 10:00 - 1300 Uhr
+        # But sometimes: 18.Dezember 2022 / 10:00 - 13:00 Uhr
         date_text = option.text
         date_text = date_text.split("-")[0]
+
+        # Consider a typo on the website.
+        date_text = date_text.replace("Julii", "Juli")
         starts_at = parse(date_text, languages=["de"])
 
         events.append(
