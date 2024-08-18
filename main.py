@@ -63,7 +63,7 @@ def download_events() -> Tuple[list[DanceEvent], MetaData]:
             try:
                 new_events = result.result()
                 print(
-                    f"Downloaded {name_map[result]} \tin {(datetime.now() - crawled_at).total_seconds():.2f}s \t({len(new_events)} events)"
+                    f"Downloaded {(name_map[result])} \tin {(datetime.now() - crawled_at).total_seconds():.2f}s \t({len(new_events):02d} events)"
                 )
                 events += new_events
             except HTTPError as e:

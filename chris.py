@@ -66,7 +66,7 @@ def download_chris_event(url: str) -> Optional[DanceEvent]:
 # event overview doesn't have all the events information. So we first
 # need to gather the links for each individual event and then download them
 # seperatly.
-def download_chris_events() -> list[DanceEvent]:
+def download_chris_events() -> list[DanceEvent | None]:
     response = requests.get(
         "https://www.tanzschulechris.at/perfektionen/tanzcafe_wien_1", timeout=10
     )
@@ -87,24 +87,5 @@ def download_chris_events() -> list[DanceEvent]:
     return events
 
 
-# FIXME: This is hacky and doesn't reflect any changes on the website
-# https://www.tanzschulechris.at/perfektionen/tanzcafe_wien_1
-def create_perfektions() -> list[DanceEvent]:
-    # Every Friday from 20-22h, except on holidays
-    return weekly_event(
-        Weekday.FRI,
-        DanceEvent(
-            starts_at=dateparser.parse("20:00"),
-            ends_at=dateparser.parse("22:00"),
-            name="Perfektion",
-            price_euro_cent=700,
-            description="Jeden Freitag von 20-22 Uhr spielen wir die beste Tanzmusik für euch: Standard, Latein, Boogie, Latino, West Coast Swing, u.v.m. An unserer Bar verwöhnen euch Nando & Maria Viktoria mit coolen Drinks & den besten Cocktails der Stadt.",
-            dancing_school="Chris",
-            website="https://www.tanzschulechris.at/perfektionen/tanzcafe_wien_1",
-        ),
-        exclude_holiday=True,
-    )
-
-
 def download_chris() -> list[DanceEvent]:
-    return [e for e in download_chris_events() + create_perfektions() if e is not None]
+    return [e for e in download_chris_events() if e is not None]
