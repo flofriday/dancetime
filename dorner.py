@@ -21,7 +21,7 @@ def create_perfections() -> list[DanceEvent]:
                 ends_at=dateparser.parse("22:15"),
                 name="Perfektion",
                 price_euro_cent=700,
-                description="Freitagsperfektion I TanzZeit ",
+                description="Freitagsperfektion I TanzZeit",
                 dancing_school="Dorner",
                 website="https://tanzdorner.at/#perfektion",
             ),
