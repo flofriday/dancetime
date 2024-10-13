@@ -28,6 +28,7 @@ from schwebach import download_schwebach
 from stanek import download_stanek
 from strobl import download_strobl
 from dorner import download_dorner
+from dance4fun import download_dance4fun
 
 
 @dataclass
@@ -49,6 +50,7 @@ def download_events() -> Tuple[list[DanceEvent], MetaData]:
         ("Strobl", download_strobl),
         ("Kopetzky", download_kopetzky),
         ("Dorner", download_dorner),
+        ("Dance4Fun", download_dance4fun),
     ]
 
     events = []
