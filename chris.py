@@ -11,6 +11,34 @@ from event import DanceEvent
 from timeutil import Weekday, weekly_event
 
 
+# Website is sorta static so it might be fine to just add the tanzcaffee this way: FIXME
+def create_tanzcaffee() -> list[DanceEvent]:
+    events = []
+    # Every day except saturday
+    for weekday in [
+        Weekday.MON,
+        Weekday.TUE,
+        Weekday.WED,
+        Weekday.THU,
+        Weekday.FRI,
+        Weekday.SUN,
+    ]:
+        events += weekly_event(
+            weekday,
+            DanceEvent(
+                starts_at=dateparser.parse("17:00"),
+                ends_at=dateparser.parse("18:00"),
+                name="Tanzcafe",
+                price_euro_cent=500,
+                description="5-Uhr-Tee in Wien",
+                dancing_school="Chris",
+                website="https://www.tanzschulechris.at/perfektionen/tanzcafe_wien",
+            ),
+        )
+
+    return events
+
+
 # Parses any string that contains either time in the format
 # `15` or `15:34`.
 def parse_time(text: str) -> Tuple[int, int]:
@@ -88,4 +116,6 @@ def download_chris_events() -> list[DanceEvent | None]:
 
 
 def download_chris() -> list[DanceEvent]:
-    return [e for e in download_chris_events() if e is not None]
+    downloaded_events = [e for e in download_chris_events() if e is not None]
+    tanzcaffee_events = create_tanzcaffee()
+    return downloaded_events + tanzcaffee_events
