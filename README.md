@@ -16,6 +16,7 @@ html, csv, json and as iCalendar to embed in your calendar.
 At the moment it downloads from:
 - [Ballsaal (Kraml)](https://www.ballsaal.at/termine_tickets/?no_cache=1)
 - [Chris](https://www.tanzschulechris.at/perfektionen/tanzcafe_wien_1)
+- [Dorner](https://tanzdorner.at/#perfektion)
 - [Immervoll](https://www.tanzschule-immervoll.at/events/)
 - [Kopetzky](https://kopetzky.at/Perfektion)
 - [Rueff](https://tanzschulerueff.at/)
