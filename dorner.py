@@ -12,7 +12,7 @@ from timeutil import Weekday, weekly_event
 # notice that the website changes.
 def create_perfections() -> list[DanceEvent]:
     events = []
-    # Every saturday and sunday evening
+    # Every friday evening
     for weekday in [Weekday.FRI]:
         events += weekly_event(
             weekday,
