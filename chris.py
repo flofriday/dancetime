@@ -2,6 +2,7 @@ import concurrent.futures
 import re
 from datetime import datetime, timedelta
 from typing import Optional, Tuple
+from holiday import holidays
 
 import dateparser
 import requests
@@ -14,6 +15,7 @@ from timeutil import Weekday, weekly_event
 # Website is sorta static so it might be fine to just add the tanzcaffee this way: FIXME
 def create_tanzcaffee() -> list[DanceEvent]:
     events = []
+    holiday_dates = holidays()
     # Every day except saturday
     for weekday in [
         Weekday.MON,
@@ -23,18 +25,29 @@ def create_tanzcaffee() -> list[DanceEvent]:
         Weekday.FRI,
         Weekday.SUN,
     ]:
-        events += weekly_event(
+        weekly_events = weekly_event(
             weekday,
             DanceEvent(
                 starts_at=dateparser.parse("17:00"),
                 ends_at=dateparser.parse("18:00"),
                 name="Tanzcafe",
                 price_euro_cent=500,
-                description="5-Uhr-Tee in Wien",
+                description="""Wehlistraße 150, 1020 Wien\n
+                                5-Uhr-Tee in Wien\n
+                                Standard, Latein, Boogie Woogie\n
+                                klimatisierte Räumlichkeiten\n
+                                genieße bei Schönwetter unsere Terrasse\n
+                                ausgenommen an Feiertagen\n
+                            """,
                 dancing_school="Chris",
                 website="https://www.tanzschulechris.at/perfektionen/tanzcafe_wien",
             ),
         )
+        events += [
+            event
+            for event in weekly_events
+            if event.starts_at.date() not in holiday_dates
+        ]
 
     return events
 
