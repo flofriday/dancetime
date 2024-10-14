@@ -12,7 +12,7 @@ from timeutil import Weekday, weekly_event
 # notice that the website changes.
 def create_perfections() -> list[DanceEvent]:
     events = []
-    # Every saturday and sunday evening
+    # Every friday evening
     for weekday in [Weekday.FRI]:
         events += weekly_event(
             weekday,
@@ -21,7 +21,7 @@ def create_perfections() -> list[DanceEvent]:
                 ends_at=dateparser.parse("22:15"),
                 name="Perfektion",
                 price_euro_cent=700,
-                description="Freitagsperfektion I TanzZeit ",
+                description="Favoritenstraße 20, 1040 Wien\nFreitagsperfektion TanzZeit\nIm Dorner Club inkludiert I Dorner Schüler:innen € 5,-- I Gäste € 7,-",
                 dancing_school="Dorner",
                 website="https://tanzdorner.at/#perfektion",
             ),
