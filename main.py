@@ -20,6 +20,8 @@ from zoneinfo import ZoneInfo
 
 from ballsaal import download_ballsaal
 from chris import download_chris
+from dance4fun import download_dance4fun
+from dorner import download_dorner
 from event import DanceEvent
 from immervoll import download_immervoll
 from kopetzky import download_kopetzky
@@ -27,8 +29,6 @@ from rueff import download_rueff
 from schwebach import download_schwebach
 from stanek import download_stanek
 from strobl import download_strobl
-from dorner import download_dorner
-from dance4fun import download_dance4fun
 
 
 @dataclass

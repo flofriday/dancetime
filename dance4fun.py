@@ -1,7 +1,6 @@
-import json
 import concurrent.futures
 from datetime import datetime
-from typing import List, Optional
+from typing import List
 
 import requests
 

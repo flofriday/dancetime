@@ -2,13 +2,13 @@ import concurrent.futures
 import re
 from datetime import datetime, timedelta
 from typing import Optional, Tuple
-from holiday import holidays
 
 import dateparser
 import requests
 from bs4 import BeautifulSoup
 
 from event import DanceEvent
+from holiday import holidays
 from timeutil import Weekday, weekly_event
 
 
