@@ -27,7 +27,7 @@ At the moment it downloads from:
 
 ## Build it yourself
 
-You need [python3](https://www.python.org/downloads/) (only tested with python 3.12)
+You need [python3](https://www.python.org/downloads/) (only tested with python 3.13)
 with [pip](https://pip.pypa.io/en/stable/) and [venv](https://docs.python.org/3/library/venv.html), and [node](https://nodejs.org/en/) with [npm](https://www.npmjs.com/package/npm).
 
 ```bash
