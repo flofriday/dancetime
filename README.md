@@ -27,16 +27,14 @@ At the moment it downloads from:
 
 ## Build it yourself
 
-You need [python3](https://www.python.org/downloads/) (only tested with python 3.13)
-with [pip](https://pip.pypa.io/en/stable/) and [venv](https://docs.python.org/3/library/venv.html), and [node](https://nodejs.org/en/) with [npm](https://www.npmjs.com/package/npm).
+You need [uv](https://github.com/astral-sh/uv) (which manages pythons packages
+and even installs python itself if no matching version is found on your system)
+and [node](https://nodejs.org/en/) with [npm](https://www.npmjs.com/package/npm).
 
 ```bash
 npm install
 npx tailwindcss -i template.css -o index.css
-python3 -m venv venv
-source venv/bin/activate
-python -m pip install -r requirements.txt
-python main.py
+uv run main.py
 ```
 
 **Note:** While working on the frontend it might be quite handy to add the

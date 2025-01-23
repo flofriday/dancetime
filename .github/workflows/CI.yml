@@ -1,4 +1,4 @@
-# A basic action that deploys to the server and reruns the generator script. 
+# A basic action that deploys to the server and reruns the generator script.
 
 name: CI
 
@@ -9,19 +9,18 @@ jobs:
     if: ${{ github.ref_name == 'main' }}
     runs-on: ubuntu-latest
     steps:
-    - name: deploy on production server
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.PASSWORD }}
-        port: ${{ secrets.PORT }}
-        script_stop: true
-        script: |
-          cd dancetime
-          git pull
-          npm install
-          npx tailwindcss --minify -i template.css -o index.css
-          source venv/bin/activate
-          python -m pip install -r requirements.txt
-          python main.py --output dist
+      - name: deploy on production server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script_stop: true
+          script: |
+            cd dancetime
+            git pull
+            npm install
+            npx tailwindcss --minify -i template.css -o index.css
+            /home/dancetime/.local/bin/uv sync
+            /home/dancetime/.local/bin/uv run main.py --output dist

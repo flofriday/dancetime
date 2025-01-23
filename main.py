@@ -12,11 +12,11 @@ import uuid
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from typing import Tuple
+from zoneinfo import ZoneInfo
 
 import icalendar
 from jinja2 import Template, select_autoescape
 from requests.exceptions import ConnectionError, HTTPError
-from zoneinfo import ZoneInfo
 
 from ballsaal import download_ballsaal
 from chris import download_chris
@@ -100,9 +100,9 @@ def download_events() -> Tuple[list[DanceEvent], MetaData]:
 
 def format_price(price_euro_cent: int) -> str:
     if price_euro_cent % 100 == 0:
-        return f"€{price_euro_cent//100},-"
+        return f"€{price_euro_cent // 100},-"
 
-    return f"€{price_euro_cent/100:.2f}".replace(".", ",")
+    return f"€{price_euro_cent / 100:.2f}".replace(".", ",")
 
 
 def write_csv(events: list[DanceEvent], metadata: MetaData, folder: str):

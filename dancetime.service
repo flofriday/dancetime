@@ -6,7 +6,7 @@ Description=Dancetime Service
 Type=simple
 User=dancetime
 WorkingDirectory=/home/dancetime/dancetime
-ExecStart=/bin/bash -c "source venv/bin/activate && python main.py --output dist"
+ExecStart="/home/dancetime/.local/bin/uv run main.py --output dist"
 
 [Install]
 WantedBy=multi-user.target
