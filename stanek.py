@@ -1,5 +1,4 @@
 from datetime import date, datetime, timedelta
-from typing import Tuple
 
 import requests
 
@@ -28,7 +27,7 @@ def download_stanek() -> list[DanceEvent]:
     ]
 
     # Convert the json data to events
-    event_keys: set[Tuple[datetime, str]] = set()
+    event_keys: set[tuple[datetime, str]] = set()
     events = []
     for item in data:
         # Ignore courses that are not open to the public

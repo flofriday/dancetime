@@ -1,6 +1,5 @@
 import re
 from datetime import datetime
-from typing import Tuple
 
 import requests
 from bs4 import BeautifulSoup
@@ -10,7 +9,7 @@ from event import DanceEvent
 
 # Parses dates in the format: `Samstag, 21.01.2023 19:30 - 22:15 Uhr`
 # which is quite common on the page.
-def parse_datetimes(text: str) -> Tuple[datetime, datetime]:
+def parse_datetimes(text: str) -> tuple[datetime, datetime]:
     date_text, start_text, end_text = re.search(
         ", ([0-9\\.]+) ([0-9:]+) - ([0-9:]+) Uhr", text
     ).groups()

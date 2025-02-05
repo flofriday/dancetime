@@ -1,7 +1,7 @@
 import concurrent.futures
 import re
 from datetime import datetime, timedelta
-from typing import Optional, Tuple
+from typing import Optional
 
 import dateparser
 import requests
@@ -54,7 +54,7 @@ def create_tanzcaffee() -> list[DanceEvent]:
 
 # Parses any string that contains either time in the format
 # `15` or `15:34`.
-def parse_time(text: str) -> Tuple[int, int]:
+def parse_time(text: str) -> tuple[int, int]:
     match = re.search(r"(\d{2}):?(\d{2})?", text)
     if match:
         hour, minute = match.groups()

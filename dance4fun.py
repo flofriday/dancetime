@@ -1,6 +1,5 @@
 import concurrent.futures
 from datetime import datetime
-from typing import List
 
 import requests
 
@@ -11,7 +10,7 @@ def parse_datetimes(date: str, time: str) -> datetime:
     return datetime.strptime(f"{date} {time}", "%Y-%m-%d %H:%M")
 
 
-def download_dance4fun_page(page: int) -> List[DanceEvent]:
+def download_dance4fun_page(page: int) -> list[DanceEvent]:
     url = f"https://retro.danceforfun.at/termine.php?page={page}"
     response = requests.get(url, timeout=10)
     response.raise_for_status()
@@ -45,7 +44,7 @@ def download_dance4fun_page(page: int) -> List[DanceEvent]:
     return events
 
 
-def download_dance4fun() -> List[DanceEvent]:
+def download_dance4fun() -> list[DanceEvent]:
     max_pages = 100  # Adjust this value if we want less events FIXME
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:

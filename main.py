@@ -11,7 +11,6 @@ import sys
 import uuid
 from dataclasses import dataclass
 from datetime import datetime, timedelta
-from typing import Tuple
 from zoneinfo import ZoneInfo
 
 import icalendar
@@ -39,7 +38,7 @@ class MetaData:
     error_messages: list[str]
 
 
-def download_events() -> Tuple[list[DanceEvent], MetaData]:
+def download_events() -> tuple[list[DanceEvent], MetaData]:
     downloaders = [
         ("Ballsaal", download_ballsaal),
         ("Chris", download_chris),
