@@ -103,10 +103,10 @@ def download_chris_event(url: str) -> Optional[DanceEvent]:
     )
 
 
-# We need to download and parse HTML for chris events. Unfortunatly the
+# We need to download and parse HTML for chris events. Unfortunately the
 # event overview doesn't have all the events information. So we first
 # need to gather the links for each individual event and then download them
-# seperatly.
+# separatly.
 def download_chris_events() -> list[DanceEvent | None]:
     response = requests.get(
         "https://www.tanzschulechris.at/perfektionen/tanzcafe_wien_1", timeout=10

@@ -35,6 +35,10 @@ def download_rueff_breakfast() -> list[DanceEvent]:
 
         # The format is: 18.Dezember 2022 / 10:00 - 1300 Uhr
         # But sometimes: 18.Dezember 2022 / 10:00 - 13:00 Uhr
+        # And sometimes: 23.März 2025
+
+        # So let's just give up on parsing the time here at all and hardcode it
+        # below.
         date_text = option.text
         date_text = date_text.split("-")[0]
 
@@ -44,7 +48,7 @@ def download_rueff_breakfast() -> list[DanceEvent]:
 
         events.append(
             DanceEvent(
-                starts_at=starts_at,
+                starts_at=starts_at.replace(hour=10, minute=00),
                 ends_at=starts_at.replace(hour=13, minute=00),
                 name="Tanzfrühstück",
                 price_euro_cent=price,
