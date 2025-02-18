@@ -45,12 +45,14 @@ def add_fine_detail(event: DanceEvent) -> DanceEvent:
     html = response.text
 
     soup = BeautifulSoup(html, "html.parser")
-    date_text = soup.find("span", class_="end-date").text
-    event.ends_at = dateparser.parse(date_text, languages=["de", "en"])
+    date_span = soup.find("span", class_="end-date")
+    if date_span:
+        date_text = date_span.text
+        event.ends_at = dateparser.parse(date_text, languages=["de", "en"])
 
-    # We don't parse the year so, the year it might assume, can be off by one.
-    while event.starts_at > event.ends_at:
-        event.ends_at += relativedelta(days=1)
+        # We don't parse the year so, the year it might assume, can be off by one.
+        while event.starts_at > event.ends_at:
+            event.ends_at += relativedelta(days=1)
 
     isAvailable = None
     price_items = soup.findAll(class_="ticket-price-cell")
