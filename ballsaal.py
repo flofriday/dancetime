@@ -39,20 +39,57 @@ def clean_name(name: str) -> str:
 # For the ends_at and price we need to do a second request to the ticketing website
 # because only there it says when the event will end. That is a bit of
 # work so we are doing it here in a separate function.
+# Unfortunately, there are two versions of the ticketing website so we need to branch
+# out into old and new here.
 def add_fine_detail(event: DanceEvent) -> DanceEvent:
     response = requests.get(event.website, timeout=10)
     response.raise_for_status()
     html = response.text
 
     soup = BeautifulSoup(html, "html.parser")
-    date_span = soup.find("span", class_="end-date")
-    if date_span:
-        date_text = date_span.text
-        event.ends_at = dateparser.parse(date_text, languages=["de", "en"])
+    if soup.find("div", class_="event-start-time"):
+        return add_fine_detail_new(event, soup)
 
-        # We don't parse the year so, the year it might assume, can be off by one.
-        while event.starts_at > event.ends_at:
-            event.ends_at += relativedelta(days=1)
+    return add_fine_detail_old(event, soup)
+
+
+def add_fine_detail_new(event: DanceEvent, soup: BeautifulSoup) -> DanceEvent:
+    date_div = soup.find("div", class_="event-start-time")
+    date_text: str = date_div.text.split("-")[-1].strip()
+    event.ends_at = dateparser.parse(date_text, languages=["de", "en"])
+
+    # We don't parse the year so, the year it might assume, can be off by one.
+    while event.starts_at > event.ends_at:
+        event.ends_at += relativedelta(days=1)
+
+    # There is no good way to find prices so let's get all text that have the
+    # right class and contain a euro sign.
+    price_divs = soup.findAll("div", class_="fw-bold")
+    price_texts = [text for d in price_divs if "€" in (text := d.text)]
+
+    for price_text in price_texts:
+        m = re.search(r"(\d+),(\d{2}) €", price_text)
+        if m is None:
+            continue
+        price = int(m.groups(0)[0]) * 100 + int(m.groups(0)[1])
+
+        if event.price_euro_cent is None or event.price_euro_cent > price:
+            event.price_euro_cent = price
+
+    # FIXME: Figure out how "ausgebucht" works in the new UI once that case
+    # actually occurs on the website.
+
+    return event
+
+
+def add_fine_detail_old(event: DanceEvent, soup: BeautifulSoup) -> DanceEvent:
+    date_span = soup.find("span", class_="end-date")
+    date_text = date_span.text
+    event.ends_at = dateparser.parse(date_text, languages=["de", "en"])
+
+    # We don't parse the year so, the year it might assume, can be off by one.
+    while event.starts_at > event.ends_at:
+        event.ends_at += relativedelta(days=1)
 
     isAvailable = None
     price_items = soup.findAll(class_="ticket-price-cell")
