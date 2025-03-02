@@ -11,11 +11,11 @@ import sys
 import uuid
 from dataclasses import dataclass
 from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
 
 import icalendar
 from jinja2 import Template, select_autoescape
 from requests.exceptions import ConnectionError, HTTPError
-from zoneinfo import ZoneInfo
 
 from ballsaal import download_ballsaal
 from chris import download_chris

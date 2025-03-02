@@ -1,6 +1,5 @@
 import re
 from datetime import date, datetime, timedelta
-from typing import List
 
 from event import DanceEvent
 
@@ -44,7 +43,7 @@ def get_next_weekday(d: date, weekday: int) -> date:
     return d + timedelta(days_ahead)
 
 
-def generate_tanzcafe_events(start_date: datetime) -> List[DanceEvent]:
+def generate_tanzcafe_events(start_date: datetime) -> list[DanceEvent]:
     """Generate Tanzcafe events for the next few weeks based on fixed schedule"""
     events = []
 
@@ -104,7 +103,7 @@ def generate_tanzcafe_events(start_date: datetime) -> List[DanceEvent]:
     return events
 
 
-def download_schwebach() -> List[DanceEvent]:
+def download_schwebach() -> list[DanceEvent]:
     """Get all Schwebach events - only Tanzcafe for now since they updated their website"""
     now = datetime.now()
     return generate_tanzcafe_events(now)
