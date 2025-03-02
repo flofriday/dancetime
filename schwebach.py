@@ -1,8 +1,6 @@
 import re
-from datetime import datetime
-
-import requests
-from bs4 import BeautifulSoup
+from datetime import date, datetime, timedelta
+from typing import List
 
 from event import DanceEvent
 
@@ -38,119 +36,75 @@ def clean_name(name: str) -> str:
     return name
 
 
-# After a bit of snooping around I found an API call the website makes to get
-# the events, so instead of parsing html we can just call the API.
-def download_schwebach_events() -> list[DanceEvent]:
-    response = requests.get(
-        "https://schwebach.at/wp-content/plugins/sieglsolutions_masterPlugin/getData/getEvents.php",
-        timeout=10,
-    )
-    response.raise_for_status()
-    data = response.json()
+def get_next_weekday(d: date, weekday: int) -> date:
+    """Get the next date for a given weekday (0=Monday, 6=Sunday)"""
+    days_ahead = weekday - d.weekday()
+    if days_ahead <= 0:  # Target day already happened this week
+        days_ahead += 7
+    return d + timedelta(days_ahead)
 
+
+def generate_tanzcafe_events(start_date: datetime) -> List[DanceEvent]:
+    """Generate Tanzcafe events for the next few weeks based on fixed schedule"""
     events = []
-    for item in data["cdata"]["events"]:
-        # Filter events that are not in Vienna or not open to public
-        if item["location_bez"] != "Wien" or "Members-Only" in item["nc_description"]:
-            continue
 
-        # Ceanup the name
-        name = clean_name(item["nc_name"])
+    # Schedule mapping: (weekday, start_hour, end_hour)
+    afternoon_schedule = [
+        (1, 15, 18),  # Tuesday
+        (2, 15, 18),  # Wednesday
+        (3, 15, 18),  # Thursday
+    ]
 
-        # The description is in html so let's convert it to text.
-        description = item["nc_shortDescription"]
-        if description == "":
-            description = BeautifulSoup(
-                item["nc_description"], features="html.parser"
-            ).text
+    evening_schedule = [
+        (3, 18, 22.5),  # Thursday
+        (4, 17, 22.5),  # Friday
+    ]
 
-        price = None
-        if (
-            m := re.search(
-                r"Eintritt: € (\d+),- für externe Gäste", item["nc_description"]
+    # Generate events for the next 4 weeks
+    base_date = start_date.date()
+    for _ in range(4):  # 4 weeks ahead
+        for weekday, start_hour, end_hour in afternoon_schedule + evening_schedule:
+            event_date = get_next_weekday(base_date, weekday)
+
+            # Skip if it's before our start date
+            if event_date < base_date:
+                continue
+
+            starts_at = datetime.combine(
+                event_date, datetime.min.time().replace(hour=int(start_hour))
             )
-        ) is not None:
-            price = int(m.groups(0)[0]) * 100
-
-        events.append(
-            DanceEvent(
-                starts_at=datetime.fromtimestamp(int(item["nc_begin"])),
-                ends_at=datetime.fromtimestamp(int(item["nc_end"])),
-                name=name,
-                price_euro_cent=price,
-                description=description.strip(),
-                dancing_school="Schwebach",
-                website="https://schwebach.at/events/" + item["webroute"],
+            ends_at = datetime.combine(
+                event_date,
+                datetime.min.time().replace(
+                    hour=int(end_hour), minute=30 if end_hour % 1 else 0
+                ),
             )
-        )
+
+            price = 1200  # €12
+            description = (
+                "Voranmeldung erforderlich.\n\n"
+                "Der gemütliche Mittelpunkt zum Tanzen und Entspannen!\n\n"
+                "Am Nachmittag bis 17:00 Uhr inklusive Kaffee und Kuchen."
+            )
+
+            events.append(
+                DanceEvent(
+                    starts_at=starts_at,
+                    ends_at=ends_at,
+                    name="Tanzcafe",
+                    price_euro_cent=price,
+                    description=description,
+                    dancing_school="Schwebach",
+                    website="https://schwebach.at/tanzcafe/",
+                )
+            )
+
+        base_date += timedelta(days=7)
 
     return events
 
 
-# Every week there are two events on thursday, one from 15-18h and
-# one from 18-22:30. Since they have the same name, it would really makes
-# sense to merge them into one.
-def merge_events(events: list[DanceEvent]) -> list[DanceEvent]:
-    if len(events) == 0:
-        return []
-
-    events = sorted(events, key=lambda e: e.starts_at)
-
-    merged_events = events[:1]
-    for event in events[1:]:
-        last_event = merged_events[-1]
-        if event.name == last_event.name and event.starts_at <= last_event.ends_at:
-            last_event.ends_at = max(event.ends_at, last_event.ends_at)
-        else:
-            merged_events.append(event)
-
-    return merged_events
-
-
-# I found another API to download the dancecafe dates. This one is a lot more
-# awkward to use as it has to be a post request to download the events.
-def download_schwebach_dancecafe() -> list[DanceEvent]:
-    url = "https://schwebach.at/wp-content/plugins/sieglsolutions_masterPlugin/getData/getTanzcafeExternEvents.php"
-
-    # NOTE: I have no f*cking idea what this payload is, but let's hope it is
-    # static and doesn't change every n days.
-    payload = "coursekey=WITCEX%25&daysfuture=63"
-    headers = {
-        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-    }
-    response = requests.post(url, headers=headers, data=payload, timeout=10)
-    response.raise_for_status()
-    data = response.json()
-
-    events = []
-    for item in data["cdata"]["courses"][0]:
-        # Filter events that are not in Vienna
-        if item["standort_longname"] != "Wien":
-            continue
-
-        # Create the name and append "ausgebucht" if it is already full.
-        # However, we still show it because suddenly disappearing items might
-        # be confusing.
-        name = item["nc_displayName"]
-        if int(item["nc_isFull"]) == 1:
-            name += " [ausgebucht]"
-
-        events.append(
-            DanceEvent(
-                starts_at=datetime.fromtimestamp(int(item["nc_start_timeU"])),
-                ends_at=datetime.fromtimestamp(int(item["nc_end_timeU"])),
-                name=name,
-                price_euro_cent=1200,
-                description="Voranmeldung erforderlich.\n\nDer gemütliche Mittelpunkt zum Tanzen und Entspannen!",
-                dancing_school="Schwebach",
-                website="https://schwebach.at/tanzcafe/",
-            )
-        )
-
-    # Some events are kinda duplicated in their API so we merge them together.
-    events = merge_events(events)
-    return events
-
-
-def download_schwebach() -> list[DanceEvent]:
-    return download_schwebach_events() + download_schwebach_dancecafe()
+def download_schwebach() -> List[DanceEvent]:
+    """Get all Schwebach events - only Tanzcafe for now since they updated their website"""
+    now = datetime.now()
+    return generate_tanzcafe_events(now)

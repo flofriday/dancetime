@@ -21,9 +21,10 @@ At the moment it downloads from:
 - [Immervoll](https://www.tanzschule-immervoll.at/events/)
 - [Kopetzky](https://kopetzky.at/Perfektion)
 - [Rueff](https://tanzschulerueff.at/)
-- [Schwebach](https://schwebach.at/events/)
+- [Schwebach](https://schwebach.at/events/) (only Tanzcafe for now since they updated their website)
 - [Stanek](https://tanzschulestanek.at/)
 - [Strobl](https://www.tanzschule-strobl.at/perfektion.html)
+- [Dimitar Stefanin](https://dimitarstefanin.com/)
 
 ## Build it yourself
 
