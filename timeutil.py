@@ -23,13 +23,26 @@ def remove_events_between(
 
 
 def weekly_event(
-    day: Weekday, template: DanceEvent, exclude_holiday=False
+    day: Weekday,
+    template: DanceEvent,
+    exclude_holiday=False,
+    weeks_of_month: list[int] | int | None = None,
 ) -> list[DanceEvent]:
     events = []
 
     for date in repeat_weekly(next_weekday(day), 9):
-        if exclude_holiday and date.date in holidays():
+        if exclude_holiday and date.date() in holidays():
             continue
+
+        # Skip if weeks_of_month is specified and doesn't match
+        if weeks_of_month is not None:
+            current_week = (date.day - 1) // 7 + 1
+            # Handle both list and single integer inputs
+            weeks = (
+                [weeks_of_month] if isinstance(weeks_of_month, int) else weeks_of_month
+            )
+            if current_week not in weeks:
+                continue
 
         event = replace(
             template,

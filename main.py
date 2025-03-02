@@ -11,15 +11,16 @@ import sys
 import uuid
 from dataclasses import dataclass
 from datetime import datetime, timedelta
-from zoneinfo import ZoneInfo
 
 import icalendar
 from jinja2 import Template, select_autoescape
 from requests.exceptions import ConnectionError, HTTPError
+from zoneinfo import ZoneInfo
 
 from ballsaal import download_ballsaal
 from chris import download_chris
 from dance4fun import download_dance4fun
+from dimitarstefanin import download_dimitarstefanin
 from dorner import download_dorner
 from event import DanceEvent
 from immervoll import download_immervoll
@@ -48,6 +49,7 @@ def download_events() -> tuple[list[DanceEvent], MetaData]:
         ("Kopetzky", download_kopetzky),
         ("Dorner", download_dorner),
         ("Dance4Fun", download_dance4fun),
+        ("Dimitar Stefanin", download_dimitarstefanin),
     ]
 
     events = []
