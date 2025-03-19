@@ -7,7 +7,7 @@ requires-python = ">=3.13"
 dependencies = [
     "beautifulsoup4>=4.13.3",
     "dateparser>=1.2.1",
-    "icalendar>=6.1.1",
+    "icalendar>=6.1.2",
     "jinja2>=3.1.6",
     "regex>=2024.11.6",
     "requests>=2.32.3",

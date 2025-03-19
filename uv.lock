@@ -63,7 +63,7 @@ dependencies = [
 requires-dist = [
     { name = "beautifulsoup4", specifier = ">=4.13.3" },
     { name = "dateparser", specifier = ">=1.2.1" },
-    { name = "icalendar", specifier = ">=6.1.1" },
+    { name = "icalendar", specifier = ">=6.1.2" },
     { name = "jinja2", specifier = ">=3.1.6" },
     { name = "regex", specifier = ">=2024.11.6" },
     { name = "requests", specifier = ">=2.32.3" },
@@ -86,15 +86,15 @@ wheels = [
 
 [[package]]
 name = "icalendar"
-version = "6.1.1"
+version = "6.1.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "python-dateutil" },
     { name = "tzdata" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/fd/b3/8fcd017f8fbaf5c3b8cd1e21dcc3f12158ce08c577b426c3c8eb21373656/icalendar-6.1.1.tar.gz", hash = "sha256:2c44355a8f006de5ae73fa3f022a1cbe2a0de6b1607ce8879739eb887c4f3471", size = 145256 }
+sdist = { url = "https://files.pythonhosted.org/packages/c0/04/0ca754a6da85c09e0edc704e38a661995c493c6a019e51c7465911431fb8/icalendar-6.1.2.tar.gz", hash = "sha256:152423b5611602374467b195f63818230ea25602acf76077d903bf5919ddf0c6", size = 151266 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/d1/cd/a1656e6db3cbb31335d1e62bb94733ad3744d51c63103196d684ed94fa27/icalendar-6.1.1-py3-none-any.whl", hash = "sha256:accf3a4be9a1f89bad00e0bf14103b02cd9b02dcb9b4258eb717f39d24cf58e9", size = 200629 },
+    { url = "https://files.pythonhosted.org/packages/be/85/8188101c2b4253a22ce843e9690abca3ae58f11a0f854db19dc9bf67e3a5/icalendar-6.1.2-py3-none-any.whl", hash = "sha256:8c5fda4dd563e603a360c095f841aa0dfa4fdad0b7202e722ba25290189c39d6", size = 206779 },
 ]
 
 [[package]]
