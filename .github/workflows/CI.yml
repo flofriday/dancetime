@@ -21,10 +21,10 @@ jobs:
         run: uv sync
 
       - name: Linting
-        run: uv tool run ruff check
+        run: uv run ruff check
 
       - name: Formatting
-        run: uv tool run ruff format --check
+        run: uv run ruff format --check
 
   deploy:
     if: ${{ github.ref_name == 'main' }}
