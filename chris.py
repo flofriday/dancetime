@@ -1,7 +1,6 @@
 import concurrent.futures
 import re
 from datetime import datetime, timedelta
-from typing import Optional
 
 import dateparser
 import requests
@@ -63,7 +62,7 @@ def parse_time(text: str) -> tuple[int, int]:
         raise ValueError(f"Invalid time format: {text}")
 
 
-def download_chris_event(url: str) -> Optional[DanceEvent]:
+def download_chris_event(url: str) -> DanceEvent | None:
     response = requests.get(url, timeout=10)
     response.raise_for_status()
 
