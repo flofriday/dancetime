@@ -8,12 +8,12 @@ def create_dance_events() -> list[DanceEvent]:
     events = []
 
     # Common event time
-    start_time = time(19, 0)  # 19:00
-    end_time = time(20, 0)  # 20:00
+    start_time = time(19, 30)  # 19:30
+    end_time = time(21, 0)  # 21:00
 
-    # Passion Latina - 1st and 3rd Thursday
+    # Passion Latina - 1st and 3rd Friday
     events += weekly_event(
-        Weekday.THU,
+        Weekday.FRI,
         DanceEvent(
             starts_at=start_time,
             ends_at=end_time,
@@ -25,12 +25,12 @@ def create_dance_events() -> list[DanceEvent]:
             dancing_school="Dimitar Stefanin",
             website="https://dimitarstefanin.com/passion-latina/",
         ),
-        weeks_of_month={1, 3},  # First and third week of the month
+        weeks_of_month=[1, 3],  # First and third week of the month
     )
 
-    # Ballroom Excellence - 2nd and 4th Thursday
+    # Ballroom Excellence - 2nd and 4th Friday
     events += weekly_event(
-        Weekday.THU,
+        Weekday.FRI,
         DanceEvent(
             starts_at=start_time,
             ends_at=end_time,
@@ -42,7 +42,7 @@ def create_dance_events() -> list[DanceEvent]:
             dancing_school="Dimitar Stefanin",
             website="https://dimitarstefanin.com/ballroom-excellence/",
         ),
-        weeks_of_month={2, 4},  # Second and fourth week of the month
+        weeks_of_month=[2, 4],  # Second and fourth week of the month
     )
 
     return events

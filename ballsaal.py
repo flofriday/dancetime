@@ -128,7 +128,7 @@ def download_ballsaal() -> list[DanceEvent]:
         name = event.find(class_="name").text
         name = clean_name(name)
         description = event.find(class_="short-description").text
-        date_string = event.find(class_="date").text
+        date_string = " ".join(event.find(class_="date").text.split())
         url = event.find(class_="button")["href"]
 
         date = datetime.strptime(date_string[4:], "%d.%m.%Y, %H:%M Uhr")
