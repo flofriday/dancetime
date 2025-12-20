@@ -37,8 +37,8 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          script_stop: true
           script: |
+            set -e
             cd dancetime
             git pull
             npm install
