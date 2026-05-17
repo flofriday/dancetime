@@ -27,12 +27,15 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 # System packages: nginx for hosting, supervisor to run multiple processes,
 # ca-certificates so the crawler can reach HTTPS sources.
+ENV TZ=Europe/Vienna
+
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         nginx \
         supervisor \
         ca-certificates \
         curl \
+        tzdata \
     && rm -rf /var/lib/apt/lists/*
 
 # Supercronic: cron designed for containers (single process, no daemonization,
