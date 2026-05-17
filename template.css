@@ -1,15 +1,62 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
 
-:root {
-  --text-color: #1e1e1e;
-  --text-secondary-color: #505050;
-  --background-color: #fffaf0;
-  --background-accent-color: #ffd787;
-  --accent1-color: #abe5bc;
-  --footer-color: #cfade8;
-  --download-color: #ffa776;
+@source './*.html';
+
+@theme {
+  --font-*: initial;
+  --font-sans:
+    IBM Plex Sans, ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-display: IBM Plex Sans;
+  --font-body: IBM Plex Sans;
+}
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
+
+@utility content {
+  @apply px-8 max-w-2xl;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@utility link {
+  @apply text-blue-700 hover:underline;
+}
+
+@utility card-border {
+  @apply border-2 border-(--text-color);
+}
+
+@utility card-shadow {
+  box-shadow: 2px 3px 0px var(--text-color);
+}
+
+@layer utilities {
+  :root {
+    --text-color: #1e1e1e;
+    --text-secondary-color: #505050;
+    --background-color: #fffaf0;
+    --background-accent-color: #ffd787;
+    --accent1-color: #abe5bc;
+    --footer-color: #cfade8;
+    --download-color: #ffa776;
+  }
 }
 
 @layer base {
@@ -17,25 +64,5 @@
     font-family: "IBM Plex Sans", system-ui, sans-serif;
     color: var(--text-color);
     background-color: var(--background-color);
-  }
-}
-
-@layer components {
-  .content {
-    @apply px-8 max-w-2xl;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .link {
-    @apply text-blue-700 hover:underline;
-  }
-
-  .card-border {
-    @apply border-2 border-[var(--text-color)];
-  }
-
-  .card-shadow {
-    box-shadow: 2px 3px 0px var(--text-color);
   }
 }

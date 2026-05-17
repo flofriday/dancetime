@@ -34,11 +34,11 @@
 
     <div class="relative w-full">
       <div
-        class="absolute top-4 h-full w-full bg-[var(--background-accent-color)] border-x-2 border-t-2 rounded-t-3xl border-[var(--text-color)]"
+        class="absolute top-4 h-full w-full bg-(--background-accent-color) border-x-2 border-t-2 rounded-t-3xl border-(--text-color)"
       ></div>
       <div class="relative w-full px-5 mb-2">
         <div
-          class="rounded-full mr-auto ml-auto px-2 w-fit mb-5 h-8 bg-[var(--accent1-color)] text-center text-sm flex items-center card-border card-shadow"
+          class="rounded-full mr-auto ml-auto px-2 w-fit mb-5 h-8 bg-(--accent1-color) text-center text-sm flex items-center card-border card-shadow"
         >
           Aktualisiert am: {{metadata.crawled_at.strftime('%d.%m.%Y um %H:%M')}}
         </div>
@@ -46,11 +46,11 @@
         {% for event in events %}
         <a
           href="{{event.website}}"
-          class="block w-full bg-[var(--background-color)] rounded-2xl card-border card-shadow pt-2 pb-2.5 px-4 mb-5 last:mb-4 max-w-xl mx-auto"
+          class="block w-full bg-(--background-color) rounded-2xl card-border card-shadow pt-2 pb-2.5 px-4 mb-5 last:mb-4 max-w-xl mx-auto"
         >
           <div class="text-lg mb-0.5">{{event.name}}</div>
           <div
-            class="flex justify-between text-sm text-[var(--text-secondary-color)]"
+            class="flex justify-between text-sm text-(--text-secondary-color)"
           >
             <div>
               <span class="pr-1.5">{{format_date(event.starts_at)}}</span>
@@ -70,19 +70,19 @@
       </div>
     </div>
     <div
-      class="h-5 w-full bg-[var(--background-accent-color)] border-x-2 border-[var(--text-color)]"
+      class="h-5 w-full bg-(--background-accent-color) border-x-2 border-(--text-color)"
     >
       <!-- This is just an extra padding -->
     </div>
 
     <div
-      class="bg-[var(--accent1-color)] card-border border-b-0 py-4 border-[var(--text-color)]"
+      class="bg-(--accent1-color) card-border border-b-0 py-4 border-(--text-color)"
     >
       <div class="content">
         <h2 class="text-2xl font-bold">Kalender Integration</h2>
         <img src="/calendar.png" />
         <div
-          class="w-full max-w-xl text-center mx-auto mb-3 py-2 px-3 card-border card-shadow rounded-xl bg-[var(--background-color)]"
+          class="w-full max-w-xl text-center mx-auto mb-3 py-2 px-3 card-border card-shadow rounded-xl bg-(--background-color)"
         >
           https://dancetime.flofriday.dev/events.ics
         </div>
@@ -124,7 +124,7 @@
       </div>
     </div>
     <div
-      class="bg-[var(--download-color)] card-border border-b-0 py-4 border-[var(--text-color)]"
+      class="bg-(--download-color) card-border border-b-0 py-4 border-(--text-color)"
     >
       <div class="content">
         <h2 class="text-2xl font-bold">Herunterladen</h2>
@@ -142,7 +142,7 @@
       </div>
     </div>
     <div
-      class="bg-[var(--footer-color)] card-border py-4 border-[var(--text-color)]"
+      class="bg-(--footer-color) card-border py-4 border-(--text-color)"
     >
       <div class="content flex justify-between">
         <span>Erstellt mit ❤️ von Tänzern</span>

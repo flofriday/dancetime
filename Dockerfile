@@ -3,8 +3,8 @@ FROM node:24-alpine AS css-builder
 WORKDIR /build
 COPY package.json package-lock.json ./
 RUN npm install
-COPY tailwind.config.js template.css template.html ./
-RUN npx tailwindcss -i template.css -o index.css
+COPY template.css template.html ./
+RUN npx @tailwindcss/cli -i template.css -o index.css
 
 # Python builder stage: has the C toolchain so dependencies without a
 # pre-built wheel for this (python, arch) combo can compile from source.
