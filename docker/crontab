@@ -1,0 +1,2 @@
+# Top-of-hour crawl. Supercronic reads this file directly.
+0 * * * * cd /app && /bin/uv run main.py --output /app/dist

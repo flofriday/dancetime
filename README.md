@@ -59,12 +59,15 @@ options:
 We directly deploy the main branch to [dancetime.flofriday.dev](https://dancetime.flofriday.dev)
 with our CI/CD [GitHub Action](https://docs.github.com/en/actions).
 
-On the linux server we have a [systemd](https://systemd.io/) timer setup that
-runs the script hourly and the generated files are statically hosted with
-[nginx](https://nginx.org/en/).
+We deploy with docker:
+```
+docker build -t dancetime .
+docker run -p 5000:5000 dancetime
+```
 
-You can see the systemd configuration in `dancetime.service` and
-`dancetime.timer`.
+The service should now be available at http://localhost:5000
+Note that the container needs some time to build the page, but you can cache the output 
+between runs by mounting a volume on `/app/dist`.
 
 ## Contributing
 

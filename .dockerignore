@@ -1,0 +1,25 @@
+.git
+.github
+.venv
+venv
+node_modules
+__pycache__
+.ruff_cache
+.ropeproject
+.DS_Store
+
+# Auto-generated outputs (regenerated at runtime)
+events.csv
+events.json
+events.ics
+index.css
+index.html
+
+# Don't need these in the image
+README.md
+LICENSE
+screenshot.png
+dancetime.service
+dancetime.timer
+Dockerfile
+.dockerignore
