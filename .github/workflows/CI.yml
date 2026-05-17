@@ -25,23 +25,3 @@ jobs:
 
       - name: Formatting
         run: uv run ruff format --check
-
-  deploy:
-    if: ${{ github.ref_name == 'main' }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: deploy on production server
-        uses: appleboy/ssh-action@v1.2.1
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
-          port: ${{ secrets.PORT }}
-          script: |
-            set -e
-            cd dancetime
-            git pull
-            npm install
-            npx tailwindcss --minify -i template.css -o index.css
-            /home/dancetime/.local/bin/uv sync
-            /home/dancetime/.local/bin/uv run main.py --output dist
