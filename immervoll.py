@@ -6,19 +6,19 @@ from bs4 import BeautifulSoup
 
 from event import DanceEvent
 
+IMMERVOLL_WEBSITE = "https://www.tanzschule-immervoll.at/events/"
+DATE_PATTERN = re.compile(r", ([0-9\\.]+) ([0-9:]+) - ([0-9:]+) Uhr")
 
-# Parses dates in the format: `Samstag, 21.01.2023 19:30 - 22:15 Uhr`
-# which is quite common on the page.
+BASE_DESCRIPTION = "Altgasse 6, 1130 Wien\nKeine Voranmeldung notwendig."
+
+
+# Parses dates like `Samstag, 21.01.2023 19:30 - 22:15 Uhr` from table rows.
 def parse_datetimes(text: str) -> tuple[datetime, datetime]:
-    date_text, start_text, end_text = re.search(
-        ", ([0-9\\.]+) ([0-9:]+) - ([0-9:]+) Uhr", text
-    ).groups()
+    date_text, start_text, end_text = DATE_PATTERN.search(text).groups()
 
     day = datetime.strptime(date_text, "%d.%m.%Y")
-    start_hour = int(start_text.split(":")[0])
-    start_min = int(start_text.split(":")[1])
-    end_hour = int(end_text.split(":")[0])
-    end_min = int(end_text.split(":")[1])
+    start_hour, start_min = (int(x) for x in start_text.split(":"))
+    end_hour, end_min = (int(x) for x in end_text.split(":"))
 
     return (
         day.replace(hour=start_hour, minute=start_min),
@@ -26,78 +26,116 @@ def parse_datetimes(text: str) -> tuple[datetime, datetime]:
     )
 
 
+def _section_heading(table) -> str:
+    heading = table.find_previous("h2")
+    return heading.get_text(strip=True) if heading else ""
+
+
+def _event_from_row(
+    starts_at: datetime,
+    ends_at: datetime,
+    section: str,
+    row_text: str,
+) -> DanceEvent | None:
+    if "festlicher Abschluss" in row_text or "Saisonabschluss" in row_text.lower() or "Allgemein" in section:
+        name = "Saisonabschluss"
+        price = 1600
+        description = (
+            f"{BASE_DESCRIPTION}\n"
+            "Teilnahme nur paarweise möglich.\n"
+            "Ein festlicher Abschluss der Tanzsaison."
+        )
+    elif "Anfänger" in section or "Bronze" in section:
+        name = "Anfänger Perfektion"
+        price = 850
+        description = (
+            f"{BASE_DESCRIPTION}\n"
+            "Teilnahme nur paarweise möglich.\n"
+            "Für Anfänger bis Bronze — Tanzlehrer im Saal."
+        )
+    elif "Jugendliche" in section:
+        name = "Perfektion Jugendliche"
+        price = 600
+        description = (
+            f"{BASE_DESCRIPTION}\nFür Jugendliche — Teilnahme auch einzeln möglich."
+        )
+    elif "Slowfox" in section or "Slowfox" in row_text:
+        name = "Slowfox Übungsabend"
+        price = 1000
+        description = (
+            f"{BASE_DESCRIPTION}\n"
+            "Teilnahme nur paarweise möglich.\n"
+            "Slowfox-Übungsabend mit aktiver Betreuung."
+        )
+    elif "Paare" in section:
+        name = "Perfektion"
+        match starts_at.weekday():
+            case 1:
+                price = 850
+            case 5:
+                price = 950
+            case _:
+                price = None
+        description = (
+            f"{BASE_DESCRIPTION}\n"
+            "Teilnahme nur paarweise möglich.\n"
+            "Verschiedene Tanz- und Übungsabende für alle Kursstufen."
+        )
+    else:
+        return None
+
+    return DanceEvent(
+        starts_at=starts_at,
+        ends_at=ends_at,
+        name=name,
+        price_euro_cent=price,
+        description=description,
+        dancing_school="Immervoll",
+        website=IMMERVOLL_WEBSITE,
+    )
+
+
 def download_immervoll() -> list[DanceEvent]:
-    response = requests.get("https://www.tanzschule-immervoll.at/events/", timeout=10)
+    response = requests.get(
+        IMMERVOLL_WEBSITE,
+        timeout=10,
+        headers={"User-Agent": "Mozilla/5.0"},
+    )
     response.raise_for_status()
 
     soup = BeautifulSoup(response.text, features="html.parser")
-    table_elements = soup.find_all("table")
+    events: list[DanceEvent] = []
+    seen_starts: set[datetime] = set()
 
-    # Parse the events
-    events = []
-    events_table = table_elements[0]
-    for row in events_table.find_all("tr"):
-        # Check via the image if that is the right location (and yes this code
-        # hurts me as much as it does you)
-        if "standort_ac" in row.find("img")["src"]:
-            # Auhof is technically in Vienna but it is a pain to get there so
-            # no we won't list it on our page.
-            continue
+    for table in soup.find_all("table"):
+        section = _section_heading(table)
+        for row in table.find_all("tr"):
+            img = row.find("img")
+            src = img.get("src") if img else None
+            if src is None:
+                continue
+            # standort_ac = Auhof-Center; standort_ag = Altgasse — list Altgasse only.
+            if "standort_ac" in src:
+                continue
 
-        info_td = row.find_all("td")[1]
-        starts_at, ends_at = parse_datetimes(info_td.text)
+            row_text = row.get_text(" ", strip=True)
+            if not DATE_PATTERN.search(row_text):
+                continue
 
-        text: str = row.find("div").text
-        name, description = text.split("|", maxsplit=1)
-        name = " ".join(
-            map(lambda s: s.capitalize(), name.strip().replace("-", " ").split(" "))
-        )
-        description = description.replace("|", "\n").strip()
+            starts_at, ends_at = parse_datetimes(row_text)
+            if starts_at in seen_starts:
+                continue
 
-        events.append(
-            DanceEvent(
-                starts_at=starts_at,
-                ends_at=ends_at,
-                name=name,
-                price_euro_cent=None,
-                description=description,
-                dancing_school="Immervoll",
-                website="https://www.tanzschule-immervoll.at/events/",
-            )
-        )
+            event = _event_from_row(starts_at, ends_at, section, row_text)
+            if event is None:
+                continue
 
-    # Parse perfections
-    perfection_table = table_elements[2]
-    for row in perfection_table.find_all("tr"):
-        # Check via the image if that is the right location (and yes this code
-        # hurts me as much as it does you)
-        if "standort_ac" in row.find("img")["src"]:
-            # Auhof is technically in Vienna but it is a pain to get there so
-            # no we won't list it on our page.
-            continue
+            if event.name == "Perfektion" and any(
+                e.starts_at == starts_at and e.name == "Saisonabschluss" for e in events
+            ):
+                continue
 
-        starts_at, ends_at = parse_datetimes(row.text.strip())
-
-        match starts_at.weekday():
-            case 1:
-                # Tuesday it's 15€ per couple
-                price = 1500 // 2
-            case 5:
-                # Saturday it's 17€ per couple
-                price = 1700 // 2
-            case _:
-                price = None
-
-        events.append(
-            DanceEvent(
-                starts_at=starts_at,
-                ends_at=ends_at,
-                name="Perfektion",
-                price_euro_cent=price,
-                description="Altgasse 6, 1130 Wien\nKeine Voranmeldung notwendig. Teilnahme nur paarweise möglich.\nVerschiedene Tanz- und Übungsabende runden unser Kursangebot ab! Hier kommen Schüler aus allen Kursstufen zusammen und perfektionieren ihr erworbenes Können. Gesellige Abende in unseren Tanzschulen bieten den optimalen Ausklang eines arbeitsreichen Tages.",
-                dancing_school="Immervoll",
-                website="https://www.tanzschule-immervoll.at/events/",
-            )
-        )
+            events.append(event)
+            seen_starts.add(starts_at)
 
     return events

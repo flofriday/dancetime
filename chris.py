@@ -11,7 +11,7 @@ from holiday import holidays
 from timeutil import Weekday, weekly_event
 
 
-# Website is sorta static so it might be fine to just add the tanzcaffee this way: FIXME
+# Website is sorta static so it might be fine to just add the tanzcafe this way: FIXME
 def create_tanzcaffee() -> list[DanceEvent]:
     events = []
     holiday_dates = holidays()
@@ -87,8 +87,8 @@ def download_chris_event(url: str) -> DanceEvent | None:
     except AttributeError:
         ends_at = None
 
-    # FIXME: Don't hardcode
     name = soup.select_one(".header > h2:nth-child(1)").text.strip()
+    # FIXME: hardcoded €7/person on Perfektion detail pages (e.g. …/perfektion-1)
     price = 700 if name == "Perfektion" else None
 
     return DanceEvent(
@@ -105,7 +105,7 @@ def download_chris_event(url: str) -> DanceEvent | None:
 # We need to download and parse HTML for chris events. Unfortunately the
 # event overview doesn't have all the events information. So we first
 # need to gather the links for each individual event and then download them
-# separatly.
+# separately.
 def download_chris_events() -> list[DanceEvent | None]:
     response = requests.get(
         "https://www.tanzschulechris.at/perfektionen/tanzcafe_wien_1", timeout=10

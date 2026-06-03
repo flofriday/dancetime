@@ -1,7 +1,15 @@
+from datetime import date
+
 import dateparser
 
 from event import DanceEvent
-from timeutil import Weekday, remove_events_between, weekly_event
+from timeutil import Weekday, weekly_event
+
+STROBL_WEBSITE = "https://www.tanzschule-strobl.at/perfektion.html"
+STROBL_DESCRIPTION = "keine Anmeldung erforderlich."
+
+# From https://www.tanzschule-strobl.at/perfektion.html — update when site changes.
+SUNDAY_CANCELLED_DATE = date(2026, 5, 24)
 
 
 # https://www.tanzschule-strobl.at/perfektion.html
@@ -9,21 +17,18 @@ from timeutil import Weekday, remove_events_between, weekly_event
 # on the website changes we need to change code. Even worse we probably won't
 # notice that the website changes.
 def create_perfections() -> list[DanceEvent]:
-    events = []
-
-    # Every sunday evening
-    events += weekly_event(
-        Weekday.SUN,
-        DanceEvent(
-            starts_at=dateparser.parse("19:00"),
-            ends_at=dateparser.parse("21:30"),
-            name="Perfektion",
-            price_euro_cent=550,
-            description="keine Anmeldung erforderlich.",
-            dancing_school="Strobl",
-            website="https://www.tanzschule-strobl.at/perfektion.html",
-        ),
+    template = DanceEvent(
+        starts_at=dateparser.parse("19:00"),
+        ends_at=dateparser.parse("21:30"),
+        name="Perfektion",
+        price_euro_cent=600,
+        description=STROBL_DESCRIPTION,
+        dancing_school="Strobl",
+        website=STROBL_WEBSITE,
     )
+
+    sunday_events = weekly_event(Weekday.SUN, template)
+    events = [e for e in sunday_events if e.starts_at.date() != SUNDAY_CANCELLED_DATE]
 
     events += weekly_event(
         Weekday.WED,
@@ -31,18 +36,11 @@ def create_perfections() -> list[DanceEvent]:
             starts_at=dateparser.parse("20:00"),
             ends_at=dateparser.parse("22:00"),
             name="Perfektion mit Karina",
-            price_euro_cent=550,
-            description="keine Anmeldung erforderlich.",
+            price_euro_cent=600,
+            description=STROBL_DESCRIPTION,
             dancing_school="Strobl",
-            website="https://www.tanzschule-strobl.at/perfektion.html",
+            website=STROBL_WEBSITE,
         ),
-    )
-
-    # No events in the semester holidays
-    events = remove_events_between(
-        dateparser.parse("2024-02-04 00:00"),
-        dateparser.parse("2024-02-11 23:59"),
-        events,
     )
 
     return events
