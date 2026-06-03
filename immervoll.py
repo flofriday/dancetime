@@ -37,7 +37,11 @@ def _event_from_row(
     section: str,
     row_text: str,
 ) -> DanceEvent | None:
-    if "festlicher Abschluss" in row_text or "Saisonabschluss" in row_text.lower() or "Allgemein" in section:
+    if (
+        "festlicher Abschluss" in row_text
+        or "Saisonabschluss" in row_text.lower()
+        or "Allgemein" in section
+    ):
         name = "Saisonabschluss"
         price = 1600
         description = (
