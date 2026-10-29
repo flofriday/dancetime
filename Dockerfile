@@ -9,7 +9,7 @@ RUN npx @tailwindcss/cli -i template.css -o index.css
 # Python builder stage: has the C toolchain so dependencies without a
 # pre-built wheel for this (python, arch) combo can compile from source.
 # The resulting /app/.venv is copied into the slim runtime stage below.
-FROM python:3.14-slim AS python-builder
+FROM python:3.15-slim AS python-builder
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
@@ -22,7 +22,7 @@ RUN uv sync --frozen --no-dev
 
 # Runtime stage: nginx serves /app/dist, supercronic runs the hourly job,
 # supervisord keeps both alive.
-FROM python:3.14-slim
+FROM python:3.15-slim
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 # System packages: nginx for hosting, supervisor to run multiple processes,
