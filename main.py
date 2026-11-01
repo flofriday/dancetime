@@ -14,6 +14,7 @@ from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
 import icalendar
+from icalendar.prop import vText
 from jinja2 import Template, select_autoescape
 from requests.exceptions import ConnectionError, HTTPError
 
@@ -235,11 +236,16 @@ def write_ics(events: list[DanceEvent], _: MetaData, folder: str):
             description += f"Preis pro Person: {format_price(event.price_euro_cent)}\n"
         description += event.description
         ics_event.add("description", description)
+        # X-ALT-DESC is a non-standard property, so icalendar>=7 encodes it as
+        # vUnknown, which does not escape newlines on serialization. Wrap it in
+        # vText (its FMTTYPE is text/html) so the newlines get escaped.
         ics_event.add(
             "x-alt-desc;fmttype=text/html",
-            '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN><HTML><BODY>\n'
-            f'<a href="{event.website}">Webseite</a><br><br>{html.escape(description).replace("\n", "<br>")}'
-            "\n</BODY></HTML>",
+            vText(
+                '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN><HTML><BODY>\n'
+                f'<a href="{event.website}">Webseite</a><br><br>{html.escape(description).replace("\n", "<br>")}'
+                "\n</BODY></HTML>"
+            ),
         )
 
         # Add the event to the calendar
